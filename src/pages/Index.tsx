@@ -9,10 +9,13 @@ import PatientForm from "@/components/PatientForm";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
 import { OdontogramDialog } from "@/components/OdontogramDialog";
+import { PatientDetailsDialog } from "@/components/PatientDetailsDialog";
+import { Tables } from "@/integrations/supabase/types";
 
 const Index = () => {
   const [search, setSearch] = useState("");
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<Tables<"patients"> | null>(null);
   const navigate = useNavigate();
 
   const { data: patients, isLoading } = useQuery({
@@ -95,7 +98,12 @@ const Index = () => {
                           <Stethoscope className="mr-2 h-4 w-4" />
                           Odontograma
                         </Button>
-                        <Button variant="outline">Ver Detalles</Button>
+                        <Button 
+                          variant="outline"
+                          onClick={() => setSelectedPatient(patient)}
+                        >
+                          Ver Detalles
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -110,6 +118,12 @@ const Index = () => {
         patientId={selectedPatientId || ""}
         open={!!selectedPatientId}
         onOpenChange={(open) => !open && setSelectedPatientId(null)}
+      />
+
+      <PatientDetailsDialog
+        patient={selectedPatient}
+        open={!!selectedPatient}
+        onOpenChange={(open) => !open && setSelectedPatient(null)}
       />
     </div>
   );
