@@ -4,12 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus, Search } from "lucide-react";
+import { Loader2, LogOut, Plus, Search } from "lucide-react";
 import PatientForm from "@/components/PatientForm";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   const { data: patients, isLoading } = useQuery({
     queryKey: ["patients", search],
@@ -29,22 +31,33 @@ const Index = () => {
     },
   });
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
+
   return (
     <div className="container mx-auto py-8">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="text-2xl font-bold">Pacientes</CardTitle>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Nuevo Paciente
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
-              <PatientForm />
-            </DialogContent>
-          </Dialog>
+          <div className="flex gap-2">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Nuevo Paciente
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[600px]">
+                <PatientForm />
+              </DialogContent>
+            </Dialog>
+            <Button variant="outline" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Cerrar Sesión
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2 mb-4">
