@@ -9,7 +9,80 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      dental_records: {
+        Row: {
+          condition: string
+          created_at: string
+          id: string
+          notes: string | null
+          patient_id: string
+          tooth_number: number
+          treatment_date: string | null
+        }
+        Insert: {
+          condition: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          patient_id: string
+          tooth_number: number
+          treatment_date?: string | null
+        }
+        Update: {
+          condition?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          tooth_number?: number
+          treatment_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dental_records_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patients: {
+        Row: {
+          address: string | null
+          birth_date: string | null
+          created_at: string
+          email: string | null
+          first_name: string
+          id: string
+          last_name: string
+          medical_history: string | null
+          phone: string | null
+        }
+        Insert: {
+          address?: string | null
+          birth_date?: string | null
+          created_at?: string
+          email?: string | null
+          first_name: string
+          id?: string
+          last_name: string
+          medical_history?: string | null
+          phone?: string | null
+        }
+        Update: {
+          address?: string | null
+          birth_date?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string
+          id?: string
+          last_name?: string
+          medical_history?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
