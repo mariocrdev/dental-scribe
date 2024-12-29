@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, LogOut, Plus, Tooth } from "lucide-react";
+import { Loader2, LogOut, Plus, Stethoscope } from "lucide-react";
 import PatientForm from "@/components/PatientForm";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
@@ -92,7 +92,7 @@ const Index = () => {
                           variant="outline"
                           onClick={() => setSelectedPatientId(patient.id)}
                         >
-                          <Tooth className="mr-2 h-4 w-4" />
+                          <Stethoscope className="mr-2 h-4 w-4" />
                           Odontograma
                         </Button>
                         <Button variant="outline">Ver Detalles</Button>
