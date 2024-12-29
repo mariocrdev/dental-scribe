@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Tables } from "@/integrations/supabase/types";
 import { OdontogramDialog } from "./OdontogramDialog";
+import { Button } from "@/components/ui/button";
+import { Pencil } from "lucide-react";
 import { useState } from "react";
 
 interface PatientDetailsDialogProps {
@@ -20,8 +22,12 @@ export const PatientDetailsDialog = ({ patient, open, onOpenChange }: PatientDet
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-3xl">
-          <DialogHeader>
+          <DialogHeader className="flex flex-row items-center justify-between">
             <DialogTitle>Detalles del Paciente</DialogTitle>
+            <Button variant="outline" size="sm">
+              <Pencil className="mr-2 h-4 w-4" />
+              Editar
+            </Button>
           </DialogHeader>
           
           <div className="grid gap-4">
