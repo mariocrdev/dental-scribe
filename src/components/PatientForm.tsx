@@ -17,13 +17,13 @@ const PatientForm = () => {
 
     const formData = new FormData(e.currentTarget);
     const patient = {
-      first_name: formData.get("first_name"),
-      last_name: formData.get("last_name"),
-      birth_date: formData.get("birth_date"),
-      phone: formData.get("phone"),
-      email: formData.get("email"),
-      address: formData.get("address"),
-      medical_history: formData.get("medical_history"),
+      first_name: String(formData.get("first_name")),
+      last_name: String(formData.get("last_name")),
+      birth_date: formData.get("birth_date") ? String(formData.get("birth_date")) : null,
+      phone: formData.get("phone") ? String(formData.get("phone")) : null,
+      email: formData.get("email") ? String(formData.get("email")) : null,
+      address: formData.get("address") ? String(formData.get("address")) : null,
+      medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : null,
     };
 
     try {
