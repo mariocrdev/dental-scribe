@@ -21,6 +21,10 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
   const { data: dentalRecords, isLoading } = useQuery({
     queryKey: ["dental-records", patientId],
     queryFn: async () => {
+      if (!patientId) {
+        return [];
+      }
+      
       const { data, error } = await supabase
         .from("dental_records")
         .select("*")
@@ -29,6 +33,7 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
       if (error) throw error;
       return data;
     },
+    enabled: !!patientId, // Only run the query if we have a patientId
   });
 
   const handleToothClick = async (toothNumber: number) => {
@@ -38,7 +43,10 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
   };
 
   const handleSaveCondition = async () => {
-    if (!selectedTooth || !condition) return;
+    if (!selectedTooth || !condition || !patientId) {
+      toast.error("Por favor seleccione un diente y una condición");
+      return;
+    }
 
     try {
       const existingRecord = dentalRecords?.find(r => r.tooth_number === selectedTooth);
