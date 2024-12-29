@@ -4,13 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, LogOut, Plus, Search } from "lucide-react";
+import { Loader2, LogOut, Plus, Tooth } from "lucide-react";
 import PatientForm from "@/components/PatientForm";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
+import { OdontogramDialog } from "@/components/OdontogramDialog";
 
 const Index = () => {
   const [search, setSearch] = useState("");
+  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const { data: patients, isLoading } = useQuery({
@@ -61,7 +63,6 @@ const Index = () => {
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2 mb-4">
-            <Search className="h-4 w-4 text-gray-400" />
             <Input
               placeholder="Buscar pacientes..."
               value={search}
@@ -86,7 +87,16 @@ const Index = () => {
                         </h3>
                         <p className="text-sm text-gray-500">{patient.email}</p>
                       </div>
-                      <Button variant="outline">Ver Detalles</Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline"
+                          onClick={() => setSelectedPatientId(patient.id)}
+                        >
+                          <Tooth className="mr-2 h-4 w-4" />
+                          Odontograma
+                        </Button>
+                        <Button variant="outline">Ver Detalles</Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -95,6 +105,12 @@ const Index = () => {
           )}
         </CardContent>
       </Card>
+
+      <OdontogramDialog
+        patientId={selectedPatientId || ""}
+        open={!!selectedPatientId}
+        onOpenChange={(open) => !open && setSelectedPatientId(null)}
+      />
     </div>
   );
 };
