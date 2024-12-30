@@ -5,43 +5,15 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { ToothRenderer } from "./ToothRenderer";
+import { ColorPicker } from "./ColorPicker";
+import { COLORS, TOTAL_TEETH, ToothData } from "@/types/odontogram";
 
 interface OdontogramDialogProps {
   patientId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-interface ToothSection {
-  name: 'oclusal' | 'mesial' | 'distal' | 'palatino' | 'vestibular';
-  color: string;
-}
-
-interface ToothData {
-  sections: Record<string, string>; // section name -> color
-  condition: string;
-}
-
-const TOTAL_TEETH = 32;
-const DEFAULT_SECTIONS: ToothSection[] = [
-  { name: 'oclusal', color: '#FFFFFF' },
-  { name: 'mesial', color: '#FFFFFF' },
-  { name: 'distal', color: '#FFFFFF' },
-  { name: 'palatino', color: '#FFFFFF' },
-  { name: 'vestibular', color: '#FFFFFF' },
-];
-
-const COLORS = [
-  '#F2FCE2', // Soft Green
-  '#FEF7CD', // Soft Yellow
-  '#FEC6A1', // Soft Orange
-  '#E5DEFF', // Soft Purple
-  '#FFDEE2', // Soft Pink
-  '#FDE1D3', // Soft Peach
-  '#D3E4FD', // Soft Blue
-  '#F1F0FB', // Soft Gray
-  '#FFFFFF', // White
-];
 
 export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDialogProps) => {
   const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
@@ -65,7 +37,6 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
     meta: {
       onSettled: (data) => {
         if (data) {
-          // Initialize teeth data from records
           const newTeethData: Record<number, ToothData> = {};
           data.forEach((record) => {
             newTeethData[record.tooth_number] = {
@@ -89,7 +60,6 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
     if (selectedTooth === null) return;
     setSelectedSection(section);
     
-    // Update the color for the selected section
     const updatedTeethData = {
       ...teethData,
       [selectedTooth]: {
@@ -140,55 +110,6 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
     }
   };
 
-  const renderToothSections = (toothNumber: number) => {
-    const toothData = teethData[toothNumber] || { sections: {}, condition: "" };
-    
-    return (
-      <div className="relative w-16 h-16">
-        {/* Oclusal (Center) */}
-        <div
-          className="absolute top-1/4 left-1/4 w-1/2 h-1/2 border border-gray-300 cursor-pointer"
-          style={{ backgroundColor: toothData.sections['oclusal'] || '#FFFFFF' }}
-          onClick={() => handleSectionClick('oclusal')}
-        />
-        {/* Mesial (Top) */}
-        <div
-          className="absolute top-0 left-1/4 w-1/2 h-1/4 border border-gray-300 cursor-pointer"
-          style={{ backgroundColor: toothData.sections['mesial'] || '#FFFFFF' }}
-          onClick={() => handleSectionClick('mesial')}
-        />
-        {/* Distal (Bottom) */}
-        <div
-          className="absolute bottom-0 left-1/4 w-1/2 h-1/4 border border-gray-300 cursor-pointer"
-          style={{ backgroundColor: toothData.sections['distal'] || '#FFFFFF' }}
-          onClick={() => handleSectionClick('distal')}
-        />
-        {/* Palatino (Left) */}
-        <div
-          className="absolute top-1/4 left-0 w-1/4 h-1/2 border border-gray-300 cursor-pointer"
-          style={{ backgroundColor: toothData.sections['palatino'] || '#FFFFFF' }}
-          onClick={() => handleSectionClick('palatino')}
-        />
-        {/* Vestibular (Right) */}
-        <div
-          className="absolute top-1/4 right-0 w-1/4 h-1/2 border border-gray-300 cursor-pointer"
-          style={{ backgroundColor: toothData.sections['vestibular'] || '#FFFFFF' }}
-          onClick={() => handleSectionClick('vestibular')}
-        />
-        {/* Tooth Number */}
-        <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 font-bold text-sm">
-          {toothNumber}
-        </div>
-        {/* Condition Text */}
-        {toothData.condition && (
-          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs truncate max-w-[60px]">
-            {toothData.condition}
-          </div>
-        )}
-      </div>
-    );
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl">
@@ -202,22 +123,11 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
           </div>
         ) : (
           <div className="grid gap-4">
-            {/* Color Picker */}
-            <div className="flex gap-2 items-center">
-              <span className="text-sm font-medium">Color:</span>
-              <div className="flex gap-1">
-                {COLORS.map((color) => (
-                  <div
-                    key={color}
-                    className={`w-6 h-6 rounded cursor-pointer border ${
-                      selectedColor === color ? 'border-black' : 'border-gray-300'
-                    }`}
-                    style={{ backgroundColor: color }}
-                    onClick={() => setSelectedColor(color)}
-                  />
-                ))}
-              </div>
-            </div>
+            <ColorPicker
+              colors={COLORS}
+              selectedColor={selectedColor}
+              onColorSelect={setSelectedColor}
+            />
 
             {/* Teeth Grid */}
             <div className="grid grid-cols-8 gap-8">
@@ -231,7 +141,11 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
                     }`}
                     onClick={() => handleToothClick(toothNumber)}
                   >
-                    {renderToothSections(toothNumber)}
+                    <ToothRenderer
+                      toothNumber={toothNumber}
+                      toothData={teethData[toothNumber] || { sections: {}, condition: "" }}
+                      onSectionClick={handleSectionClick}
+                    />
                   </div>
                 );
               })}
