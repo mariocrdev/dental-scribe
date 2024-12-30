@@ -56,7 +56,7 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
     setCondition(record?.condition || "");
   };
 
-  const handleSectionClick = (section: string) => {
+  const handleSectionClick = async (section: string) => {
     if (selectedTooth === null) return;
     setSelectedSection(section);
     
@@ -71,6 +71,35 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
       },
     };
     setTeethData(updatedTeethData);
+
+    // Save the section color immediately
+    try {
+      const existingRecord = dentalRecords?.find(r => r.tooth_number === selectedTooth);
+      const sections = updatedTeethData[selectedTooth].sections;
+
+      if (existingRecord) {
+        const { error } = await supabase
+          .from("dental_records")
+          .update({ sections })
+          .eq("id", existingRecord.id);
+
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("dental_records")
+          .insert({
+            patient_id: patientId,
+            tooth_number: selectedTooth,
+            sections,
+            condition: "", // Empty condition is now allowed
+          });
+
+        if (error) throw error;
+      }
+    } catch (error) {
+      console.error("Error saving dental record:", error);
+      toast.error("Error al guardar el color del diente");
+    }
   };
 
   const handleSaveCondition = async () => {
@@ -86,7 +115,7 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
       if (existingRecord) {
         const { error } = await supabase
           .from("dental_records")
-          .update({ condition, sections })
+          .update({ condition })
           .eq("id", existingRecord.id);
 
         if (error) throw error;
@@ -103,10 +132,10 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
         if (error) throw error;
       }
 
-      toast.success("Registro dental guardado exitosamente");
+      toast.success("Condición guardada exitosamente");
     } catch (error) {
       console.error("Error saving dental record:", error);
-      toast.error("Error al guardar el registro dental");
+      toast.error("Error al guardar la condición");
     }
   };
 
@@ -166,7 +195,7 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
                   <option value="Corona">Corona</option>
                   <option value="Puente">Puente</option>
                 </select>
-                <Button onClick={handleSaveCondition}>Guardar</Button>
+                <Button onClick={handleSaveCondition}>Guardar Condición</Button>
               </div>
             )}
           </div>
