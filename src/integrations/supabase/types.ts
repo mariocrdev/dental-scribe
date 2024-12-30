@@ -16,6 +16,7 @@ export type Database = {
           id: string
           notes: string | null
           patient_id: string
+          sections: Json | null
           tooth_number: number
           treatment_date: string | null
         }
@@ -25,6 +26,7 @@ export type Database = {
           id?: string
           notes?: string | null
           patient_id: string
+          sections?: Json | null
           tooth_number: number
           treatment_date?: string | null
         }
@@ -34,6 +36,7 @@ export type Database = {
           id?: string
           notes?: string | null
           patient_id?: string
+          sections?: Json | null
           tooth_number?: number
           treatment_date?: string | null
         }

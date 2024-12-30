@@ -62,17 +62,21 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
       return data;
     },
     enabled: !!patientId,
-    onSuccess: (data) => {
-      // Initialize teeth data from records
-      const newTeethData: Record<number, ToothData> = {};
-      data.forEach((record) => {
-        newTeethData[record.tooth_number] = {
-          sections: record.sections || {},
-          condition: record.condition || "",
-        };
-      });
-      setTeethData(newTeethData);
-    },
+    meta: {
+      onSettled: (data) => {
+        if (data) {
+          // Initialize teeth data from records
+          const newTeethData: Record<number, ToothData> = {};
+          data.forEach((record) => {
+            newTeethData[record.tooth_number] = {
+              sections: record.sections || {},
+              condition: record.condition || "",
+            };
+          });
+          setTeethData(newTeethData);
+        }
+      }
+    }
   });
 
   const handleToothClick = (toothNumber: number) => {
