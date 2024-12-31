@@ -15,7 +15,7 @@ export const ToothRenderer = ({ toothNumber, toothData, onSectionClick }: ToothR
       </div>
       
       {/* Tooth Diagram */}
-      <div className="relative w-14 h-14">
+      <div className="relative w-16 h-16">
         {/* Oclusal (Center) */}
         <div
           className="absolute top-1/4 left-1/4 w-1/2 h-1/2 border border-gray-300 cursor-pointer"
