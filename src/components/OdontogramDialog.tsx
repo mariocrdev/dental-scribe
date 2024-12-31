@@ -193,9 +193,11 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
                   onChange={(e) => setCondition(e.target.value)}
                 >
                   <option value="">Seleccionar condición</option>
-                  <option value="Extraido">Extraido</option>
-                  <option value="Endodoncia">Endodoncia</option>
-                  <option value="Sellado">Sellado</option>
+                  <option value="Caries">Caries</option>
+                  <option value="Obturado">Obturado</option>
+                  <option value="Ausente">Ausente</option>
+                  <option value="Corona">Corona</option>
+                  <option value="Puente">Puente</option>
                 </select>
                 <Button onClick={handleSaveCondition}>Guardar Condición</Button>
               </div>
