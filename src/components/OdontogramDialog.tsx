@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react';
 import { toast } from "sonner";
 import { ToothRenderer } from "./ToothRenderer";
 import { ColorPicker } from "./ColorPicker";
@@ -164,7 +164,7 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
               onColorSelect={setSelectedColor}
             />
 
-            <div className="grid grid-cols-8 gap-x-2 gap-y-16">
+            <div className="grid grid-cols-8 gap-x-2 gap-y-8">
               {Array.from({ length: TOTAL_TEETH }, (_, i) => {
                 const toothNumber = i + 1;
                 return (
@@ -208,3 +208,4 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
     </Dialog>
   );
 };
+

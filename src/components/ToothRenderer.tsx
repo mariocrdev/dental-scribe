@@ -8,14 +8,14 @@ interface ToothRendererProps {
 
 export const ToothRenderer = ({ toothNumber, toothData, onSectionClick }: ToothRendererProps) => {
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-1">
       {/* Tooth Number Section */}
-      <div className="text-sm font-bold">
+      <div className="text-xs font-bold">
         {toothNumber}
       </div>
       
       {/* Tooth Diagram */}
-      <div className="relative w-16 h-16">
+      <div className="relative w-14 h-14">
         {/* Oclusal (Center) */}
         <div
           className="absolute top-1/4 left-1/4 w-1/2 h-1/2 border border-gray-300 cursor-pointer"
@@ -49,9 +49,10 @@ export const ToothRenderer = ({ toothNumber, toothData, onSectionClick }: ToothR
       </div>
       
       {/* Condition Text Section */}
-      <div className="h-4 text-xs text-center">
+      <div className="h-3 text-[10px] text-center">
         {toothData.condition}
       </div>
     </div>
   );
 };
+
