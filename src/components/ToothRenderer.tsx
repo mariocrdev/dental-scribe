@@ -8,7 +8,7 @@ interface ToothRendererProps {
 
 export const ToothRenderer = ({ toothNumber, toothData, onSectionClick }: ToothRendererProps) => {
   return (
-    <div className="relative w-16 h-16">
+    <div className="relative w-16 h-16 mx-4">
       {/* Oclusal (Center) */}
       <div
         className="absolute top-1/4 left-1/4 w-1/2 h-1/2 border border-gray-300 cursor-pointer"
@@ -40,12 +40,12 @@ export const ToothRenderer = ({ toothNumber, toothData, onSectionClick }: ToothR
         onClick={() => onSectionClick('vestibular')}
       />
       {/* Tooth Number */}
-      <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 font-bold text-sm">
+      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 font-bold text-sm">
         {toothNumber}
       </div>
       {/* Condition Text */}
       {toothData.condition && (
-        <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs truncate max-w-[60px]">
+        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs truncate max-w-[80px] text-center">
           {toothData.condition}
         </div>
       )}

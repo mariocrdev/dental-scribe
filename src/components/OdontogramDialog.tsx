@@ -43,7 +43,6 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
     enabled: !!patientId && open,
   });
 
-  // Effect to update teethData when dentalRecords change
   useEffect(() => {
     if (dentalRecords) {
       console.log("Updating teeth data from records:", dentalRecords);
@@ -158,14 +157,14 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
             <Loader2 className="h-6 w-6 animate-spin" />
           </div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-6">
             <ColorPicker
               colors={COLORS}
               selectedColor={selectedColor}
               onColorSelect={setSelectedColor}
             />
 
-            <div className="grid grid-cols-8 gap-8">
+            <div className="grid grid-cols-8 gap-x-2 gap-y-12">
               {Array.from({ length: TOTAL_TEETH }, (_, i) => {
                 const toothNumber = i + 1;
                 return (
