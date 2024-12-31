@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
@@ -26,29 +26,38 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
     queryKey: ["dental-records", patientId],
     queryFn: async () => {
       if (!patientId) return [];
+      console.log("Fetching dental records for patient:", patientId);
       const { data, error } = await supabase
         .from("dental_records")
         .select("*")
         .eq("patient_id", patientId);
-      if (error) throw error;
+      
+      if (error) {
+        console.error("Error fetching dental records:", error);
+        throw error;
+      }
+      
+      console.log("Fetched dental records:", data);
       return data;
     },
-    enabled: !!patientId,
-    meta: {
-      onSettled: (data) => {
-        if (data) {
-          const newTeethData: Record<number, ToothData> = {};
-          data.forEach((record) => {
-            newTeethData[record.tooth_number] = {
-              sections: record.sections || {},
-              condition: record.condition || "",
-            };
-          });
-          setTeethData(newTeethData);
-        }
-      }
-    }
+    enabled: !!patientId && open,
   });
+
+  // Effect to update teethData when dentalRecords change
+  useEffect(() => {
+    if (dentalRecords) {
+      console.log("Updating teeth data from records:", dentalRecords);
+      const newTeethData: Record<number, ToothData> = {};
+      dentalRecords.forEach((record) => {
+        newTeethData[record.tooth_number] = {
+          sections: record.sections as Record<string, string> || {},
+          condition: record.condition || "",
+        };
+      });
+      console.log("New teeth data:", newTeethData);
+      setTeethData(newTeethData);
+    }
+  }, [dentalRecords]);
 
   const handleToothClick = (toothNumber: number) => {
     setSelectedTooth(toothNumber);
@@ -72,7 +81,6 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
     };
     setTeethData(updatedTeethData);
 
-    // Save the section color immediately
     try {
       const existingRecord = dentalRecords?.find(r => r.tooth_number === selectedTooth);
       const sections = updatedTeethData[selectedTooth].sections;
@@ -91,7 +99,7 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
             patient_id: patientId,
             tooth_number: selectedTooth,
             sections,
-            condition: "", // Empty condition is now allowed
+            condition: "",
           });
 
         if (error) throw error;
@@ -110,7 +118,6 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
 
     try {
       const existingRecord = dentalRecords?.find(r => r.tooth_number === selectedTooth);
-      const sections = teethData[selectedTooth]?.sections || {};
 
       if (existingRecord) {
         const { error } = await supabase
@@ -126,7 +133,7 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
             patient_id: patientId,
             tooth_number: selectedTooth,
             condition,
-            sections,
+            sections: teethData[selectedTooth]?.sections || {},
           });
 
         if (error) throw error;
@@ -158,7 +165,6 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
               onColorSelect={setSelectedColor}
             />
 
-            {/* Teeth Grid */}
             <div className="grid grid-cols-8 gap-8">
               {Array.from({ length: TOTAL_TEETH }, (_, i) => {
                 const toothNumber = i + 1;
@@ -180,7 +186,6 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
               })}
             </div>
 
-            {/* Condition Selector */}
             {selectedTooth && (
               <div className="flex gap-2">
                 <select
