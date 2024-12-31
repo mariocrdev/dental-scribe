@@ -164,13 +164,13 @@ export const OdontogramDialog = ({ patientId, open, onOpenChange }: OdontogramDi
               onColorSelect={setSelectedColor}
             />
 
-            <div className="grid grid-cols-8 gap-x-2 gap-y-24">
+            <div className="grid grid-cols-8 gap-x-2 gap-y-16">
               {Array.from({ length: TOTAL_TEETH }, (_, i) => {
                 const toothNumber = i + 1;
                 return (
                   <div
                     key={toothNumber}
-                    className={`relative ${
+                    className={`${
                       selectedTooth === toothNumber ? 'ring-2 ring-blue-500 rounded-lg' : ''
                     }`}
                     onClick={() => handleToothClick(toothNumber)}
