@@ -40,12 +40,12 @@ export const ToothRenderer = ({ toothNumber, toothData, onSectionClick }: ToothR
         onClick={() => onSectionClick('vestibular')}
       />
       {/* Tooth Number */}
-      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 font-bold text-sm">
+      <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 font-bold text-sm">
         {toothNumber}
       </div>
       {/* Condition Text */}
       {toothData.condition && (
-        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs truncate max-w-[80px] text-center">
+        <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-xs truncate max-w-[80px] text-center">
           {toothData.condition}
         </div>
       )}
