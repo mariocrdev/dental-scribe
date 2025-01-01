@@ -53,36 +53,72 @@ export type Database = {
       patients: {
         Row: {
           address: string | null
+          age: number | null
+          age_group: string | null
           birth_date: string | null
+          blood_pressure: string | null
+          consultation_reason: string | null
           created_at: string
+          current_illness: string | null
           email: string | null
           first_name: string
+          heart_rate: number | null
           id: string
           last_name: string
           medical_history: string | null
+          medical_record_number: string | null
+          personal_family_history: string | null
           phone: string | null
+          respiratory_rate: number | null
+          sex: string | null
+          systemic_examination: Json | null
+          temperature: number | null
         }
         Insert: {
           address?: string | null
+          age?: number | null
+          age_group?: string | null
           birth_date?: string | null
+          blood_pressure?: string | null
+          consultation_reason?: string | null
           created_at?: string
+          current_illness?: string | null
           email?: string | null
           first_name: string
+          heart_rate?: number | null
           id?: string
           last_name: string
           medical_history?: string | null
+          medical_record_number?: string | null
+          personal_family_history?: string | null
           phone?: string | null
+          respiratory_rate?: number | null
+          sex?: string | null
+          systemic_examination?: Json | null
+          temperature?: number | null
         }
         Update: {
           address?: string | null
+          age?: number | null
+          age_group?: string | null
           birth_date?: string | null
+          blood_pressure?: string | null
+          consultation_reason?: string | null
           created_at?: string
+          current_illness?: string | null
           email?: string | null
           first_name?: string
+          heart_rate?: number | null
           id?: string
           last_name?: string
           medical_history?: string | null
+          medical_record_number?: string | null
+          personal_family_history?: string | null
           phone?: string | null
+          respiratory_rate?: number | null
+          sex?: string | null
+          systemic_examination?: Json | null
+          temperature?: number | null
         }
         Relationships: []
       }
