@@ -188,13 +188,13 @@ export default function PatientForm() {
           },
         },
         periodontal_disease: {
-          level: null,
+          level: undefined,
         },
         malocclusion: {
-          angle_classification: null,
+          angle_classification: undefined,
         },
         fluorosis: {
-          level: null,
+          level: undefined,
         },
       },
       cpo_ceo_indices: {
@@ -216,7 +216,7 @@ export default function PatientForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const { error } = await supabase.from("patients").insert([values]);
+      const { error } = await supabase.from("patients").insert(values);
       
       if (error) throw error;
 
@@ -1043,4 +1043,3 @@ export default function PatientForm() {
     </div>
   );
 }
-
