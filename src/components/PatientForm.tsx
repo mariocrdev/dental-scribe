@@ -17,6 +17,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DialogHeader, DialogTitle } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
   first_name: z.string().min(2, {
@@ -54,6 +55,49 @@ const formSchema = z.object({
     oropharynx: z.string().optional(),
     atm: z.string().optional(),
     lymph_nodes: z.string().optional()
+  }).optional(),
+  oral_health_indicators: z.object({
+    dental_pieces: z.object({
+      "16_17_55": z.object({
+        plaque: z.string().optional(),
+        calculus: z.string().optional(),
+        gingivitis: z.string().optional(),
+      }),
+      "11_21_51": z.object({
+        plaque: z.string().optional(),
+        calculus: z.string().optional(),
+        gingivitis: z.string().optional(),
+      }),
+      "26_27_65": z.object({
+        plaque: z.string().optional(),
+        calculus: z.string().optional(),
+        gingivitis: z.string().optional(),
+      }),
+      "36_37_75": z.object({
+        plaque: z.string().optional(),
+        calculus: z.string().optional(),
+        gingivitis: z.string().optional(),
+      }),
+      "31_41_71": z.object({
+        plaque: z.string().optional(),
+        calculus: z.string().optional(),
+        gingivitis: z.string().optional(),
+      }),
+      "46_47_85": z.object({
+        plaque: z.string().optional(),
+        calculus: z.string().optional(),
+        gingivitis: z.string().optional(),
+      }),
+    }),
+    periodontal_disease: z.object({
+      level: z.enum(["LEVE", "MODERADA", "SEVERA"]).optional(),
+    }),
+    malocclusion: z.object({
+      angle_classification: z.enum(["I", "II", "III"]).optional(),
+    }),
+    fluorosis: z.object({
+      level: z.enum(["LEVE", "MODERADA", "SEVERA"]).optional(),
+    }),
   }).optional(),
 });
 
@@ -96,6 +140,49 @@ export default function PatientForm() {
         atm: "",
         lymph_nodes: ""
       },
+      oral_health_indicators: {
+        dental_pieces: {
+          "16_17_55": {
+            plaque: "",
+            calculus: "",
+            gingivitis: "",
+          },
+          "11_21_51": {
+            plaque: "",
+            calculus: "",
+            gingivitis: "",
+          },
+          "26_27_65": {
+            plaque: "",
+            calculus: "",
+            gingivitis: "",
+          },
+          "36_37_75": {
+            plaque: "",
+            calculus: "",
+            gingivitis: "",
+          },
+          "31_41_71": {
+            plaque: "",
+            calculus: "",
+            gingivitis: "",
+          },
+          "46_47_85": {
+            plaque: "",
+            calculus: "",
+            gingivitis: "",
+          },
+        },
+        periodontal_disease: {
+          level: null,
+        },
+        malocclusion: {
+          angle_classification: null,
+        },
+        fluorosis: {
+          level: null,
+        },
+      }
     },
   });
 
@@ -596,6 +683,144 @@ export default function PatientForm() {
                     </FormItem>
                   )}
                 />
+              </div>
+            </div>
+
+            <div className="space-y-4 mt-8">
+              <h3 className="text-lg font-semibold">7. Indicadores de Salud Bucal</h3>
+        
+              <div className="border rounded-lg p-4 space-y-4">
+                <h4 className="font-medium">Higiene Oral Simplificada</h4>
+          
+                {/* Dental Pieces Grid */}
+                <div className="space-y-4">
+                  {[
+                    ["16_17_55", "16-17-55"],
+                    ["11_21_51", "11-21-51"],
+                    ["26_27_65", "26-27-65"],
+                    ["36_37_75", "36-37-75"],
+                    ["31_41_71", "31-41-71"],
+                    ["46_47_85", "46-47-85"],
+                  ].map(([key, label]) => (
+                    <div key={key} className="grid grid-cols-4 gap-4 items-center">
+                      <div className="font-medium">{label}</div>
+                      <FormField
+                        control={form.control}
+                        name={`oral_health_indicators.dental_pieces.${key}.plaque`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Placa</FormLabel>
+                            <FormControl>
+                              <Input placeholder="0-1-2-3" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`oral_health_indicators.dental_pieces.${key}.calculus`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Cálculo</FormLabel>
+                            <FormControl>
+                              <Input placeholder="0-1-2-3" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`oral_health_indicators.dental_pieces.${key}.gingivitis`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Gingivitis</FormLabel>
+                            <FormControl>
+                              <Input placeholder="0-1" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Disease Indicators */}
+                <div className="grid grid-cols-3 gap-4 mt-4">
+                  <FormField
+                    control={form.control}
+                    name="oral_health_indicators.periodontal_disease.level"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Enfermedad Periodontal</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar nivel" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="LEVE">Leve</SelectItem>
+                            <SelectItem value="MODERADA">Moderada</SelectItem>
+                            <SelectItem value="SEVERA">Severa</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="oral_health_indicators.malocclusion.angle_classification"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mal Oclusión</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar clasificación" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="I">Angle I</SelectItem>
+                            <SelectItem value="II">Angle II</SelectItem>
+                            <SelectItem value="III">Angle III</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="oral_health_indicators.fluorosis.level"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Fluorosis</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar nivel" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="LEVE">Leve</SelectItem>
+                            <SelectItem value="MODERADA">Moderada</SelectItem>
+                            <SelectItem value="SEVERA">Severa</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
 
