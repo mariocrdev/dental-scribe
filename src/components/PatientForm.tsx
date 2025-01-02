@@ -99,6 +99,20 @@ const formSchema = z.object({
       level: z.enum(["LEVE", "MODERADA", "SEVERA"]).optional(),
     }),
   }).optional(),
+  cpo_ceo_indices: z.object({
+    permanent_teeth: z.object({
+      C: z.number().min(0).nullable(),
+      P: z.number().min(0).nullable(),
+      O: z.number().min(0).nullable(),
+      total: z.number().min(0).optional(),
+    }),
+    primary_teeth: z.object({
+      c: z.number().min(0).nullable(),
+      e: z.number().min(0).nullable(),
+      o: z.number().min(0).nullable(),
+      total: z.number().min(0).optional(),
+    }),
+  }).optional(),
 });
 
 export default function PatientForm() {
@@ -181,6 +195,20 @@ export default function PatientForm() {
         },
         fluorosis: {
           level: null,
+        },
+      },
+      cpo_ceo_indices: {
+        permanent_teeth: {
+          C: null,
+          P: null,
+          O: null,
+          total: undefined,
+        },
+        primary_teeth: {
+          c: null,
+          e: null,
+          o: null,
+          total: undefined,
         },
       }
     },
@@ -820,6 +848,188 @@ export default function PatientForm() {
                       </FormItem>
                     )}
                   />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4 mt-8">
+              <h3 className="text-lg font-semibold">8. Índices CPO-ceo</h3>
+  
+              <div className="border rounded-lg p-4 space-y-6">
+                {/* Permanent Teeth (CPO) */}
+                <div className="space-y-2">
+                  <h4 className="font-medium">Dientes Permanentes (CPO)</h4>
+                  <div className="grid grid-cols-4 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="cpo_ceo_indices.permanent_teeth.C"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>C (Cariados)</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min="0"
+                              placeholder="0"
+                              {...field}
+                              onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="cpo_ceo_indices.permanent_teeth.P"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>P (Perdidos)</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min="0"
+                              placeholder="0"
+                              {...field}
+                              onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="cpo_ceo_indices.permanent_teeth.O"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>O (Obturados)</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min="0"
+                              placeholder="0"
+                              {...field}
+                              onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="cpo_ceo_indices.permanent_teeth.total"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Total</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              disabled
+                              value={
+                                (form.watch("cpo_ceo_indices.permanent_teeth.C") || 0) +
+                                (form.watch("cpo_ceo_indices.permanent_teeth.P") || 0) +
+                                (form.watch("cpo_ceo_indices.permanent_teeth.O") || 0)
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Primary Teeth (ceo) */}
+                <div className="space-y-2">
+                  <h4 className="font-medium">Dientes Primarios (ceo)</h4>
+                  <div className="grid grid-cols-4 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="cpo_ceo_indices.primary_teeth.c"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>c (cariados)</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min="0"
+                              placeholder="0"
+                              {...field}
+                              onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="cpo_ceo_indices.primary_teeth.e"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>e (extraídos)</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min="0"
+                              placeholder="0"
+                              {...field}
+                              onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="cpo_ceo_indices.primary_teeth.o"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>o (obturados)</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min="0"
+                              placeholder="0"
+                              {...field}
+                              onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="cpo_ceo_indices.primary_teeth.total"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Total</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              disabled
+                              value={
+                                (form.watch("cpo_ceo_indices.primary_teeth.c") || 0) +
+                                (form.watch("cpo_ceo_indices.primary_teeth.e") || 0) +
+                                (form.watch("cpo_ceo_indices.primary_teeth.o") || 0)
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
