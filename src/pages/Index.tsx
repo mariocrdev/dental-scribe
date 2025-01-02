@@ -21,17 +21,22 @@ const Index = () => {
   const { data: patients, isLoading } = useQuery({
     queryKey: ["patients", search],
     queryFn: async () => {
-      const query = supabase
+      let query = supabase
         .from("patients")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (search) {
-        query.or(`first_name.ilike.%${search}%,last_name.ilike.%${search}%`);
+        query = query.or(
+          `first_name.ilike.%${search}%,last_name.ilike.%${search}%,medical_record_number.ilike.%${search}%`
+        );
       }
 
       const { data, error } = await query;
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching patients:", error);
+        throw error;
+      }
       return data;
     },
   });
