@@ -41,6 +41,20 @@ const formSchema = z.object({
   heart_rate: z.number().int().positive().optional(),
   temperature: z.number().positive().optional(),
   respiratory_rate: z.number().int().positive().optional(),
+  stomatological_exam: z.object({
+    lips: z.string().optional(),
+    cheeks: z.string().optional(),
+    upper_maxilla: z.string().optional(),
+    lower_maxilla: z.string().optional(),
+    tongue: z.string().optional(),
+    palate: z.string().optional(),
+    floor: z.string().optional(),
+    lateral_cheeks: z.string().optional(),
+    salivary_glands: z.string().optional(),
+    oropharynx: z.string().optional(),
+    atm: z.string().optional(),
+    lymph_nodes: z.string().optional()
+  }).optional(),
 });
 
 export default function PatientForm() {
@@ -68,6 +82,20 @@ export default function PatientForm() {
       heart_rate: undefined,
       temperature: undefined,
       respiratory_rate: undefined,
+      stomatological_exam: {
+        lips: "",
+        cheeks: "",
+        upper_maxilla: "",
+        lower_maxilla: "",
+        tongue: "",
+        palate: "",
+        floor: "",
+        lateral_cheeks: "",
+        salivary_glands: "",
+        oropharynx: "",
+        atm: "",
+        lymph_nodes: ""
+      },
     },
   });
 
@@ -388,6 +416,189 @@ export default function PatientForm() {
               />
             </div>
 
+            <div className="space-y-4 mt-8">
+              <h3 className="text-lg font-semibold">Examen del Sistema Estomatognático</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.lips"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>1. Labios</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción de labios" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.cheeks"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>2. Mejillas</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción de mejillas" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.upper_maxilla"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>3. Maxilar Superior</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción del maxilar superior" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.lower_maxilla"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>4. Maxilar Inferior</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción del maxilar inferior" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.tongue"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>5. Lengua</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción de la lengua" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.palate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>6. Paladar</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción del paladar" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.floor"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>7. Piso</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción del piso" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.lateral_cheeks"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>8. Carrillos</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción de los carrillos" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.salivary_glands"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>9. Glándulas Salivales</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción de las glándulas salivales" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.oropharynx"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>10. Oro Faringe</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción de la oro faringe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.atm"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>11. A.T.M.</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción de la A.T.M." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="stomatological_exam.lymph_nodes"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>12. Ganglios</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Descripción de los ganglios" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
             <div className="pt-4 space-x-2 flex justify-end">
               <Button type="submit">Guardar Paciente</Button>
             </div>
@@ -397,3 +608,4 @@ export default function PatientForm() {
     </div>
   );
 }
+
