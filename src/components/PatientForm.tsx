@@ -31,7 +31,7 @@ const formSchema = z.object({
   birth_date: z.string().optional(),
   address: z.string().optional(),
   medical_history: z.string().optional(),
-  sex: z.string().optional(),
+  sex: z.string().max(1).optional(), // Ensure sex is max 1 character
   age: z.number().int().positive().optional(),
   medical_record_number: z.string().optional(),
   age_group: z.string().optional(),
@@ -115,11 +115,13 @@ const formSchema = z.object({
   }).optional(),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 export default function PatientForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       first_name: "",
@@ -202,19 +204,19 @@ export default function PatientForm() {
           C: null,
           P: null,
           O: null,
-          total: undefined,
+          total: 0,
         },
         primary_teeth: {
           c: null,
           e: null,
           o: null,
-          total: undefined,
+          total: 0,
         },
       }
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: FormValues) {
     try {
       const { error } = await supabase.from("patients").insert(values);
       
