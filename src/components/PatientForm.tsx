@@ -28,11 +28,18 @@ const PatientForm = () => {
         };
 
         try {
-            const { data, error } = await supabase.from("patients").insert([patient]).select();
-            
-            if (error) throw error;
+            const { data, error } = await supabase
+                .from("patients")
+                .insert([patient])
+                .select();
+
+            if (error) {
+                console.error("Supabase error:", error);
+                throw error;
+            }
 
             if (data && data.length > 0) {
+                console.log("Patient data saved successfully:", data[0]);
                 toast({
                     title: "Paciente registrado",
                     description: "El paciente ha sido registrado exitosamente.",
@@ -41,10 +48,11 @@ const PatientForm = () => {
                 // Reset form
                 e.currentTarget.reset();
             } else {
+                console.error("No data returned from Supabase");
                 throw new Error("No se recibió confirmación de la inserción");
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error al guardar el paciente:", error);
             toast({
                 title: "Error",
                 description: "Hubo un error al registrar el paciente. Por favor, intente nuevamente.",
