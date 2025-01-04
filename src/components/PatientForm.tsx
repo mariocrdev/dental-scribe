@@ -6,8 +6,6 @@ import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
-import { formSchema, type FormValues } from "./patient-form/schema";
-import { PersonalInfo } from "./patient-form/PersonalInfo";
 
 const PatientForm = () => {
   const { toast } = useToast();
