@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 
@@ -28,15 +28,24 @@ const PatientForm = () => {
         };
 
         try {
-            const { data, error } = await supabase.from("patients").insert([patient]);
+            const { error } = await supabase.from("patients").insert([patient]);
+            
             if (error) {
                 console.error("Error de inserción:", error);
-                throw error;
+                toast({
+                    title: "Error",
+                    description: "Hubo un error al registrar el paciente.",
+                    variant: "destructive",
+                });
+            } else {
+                // Mostrar mensaje de éxito
+                toast({
+                    title: "¡Éxito!",
+                    description: "Paciente registrado correctamente.",
+                });
+                // Reset form
+                e.currentTarget.reset();
             }
-            console.log("Datos insertados:", data); // Verifica los datos retornados
-
-            // Reset form
-            e.currentTarget.reset();
         } catch (error) {
             console.error("Error:", error);
             toast({
