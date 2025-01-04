@@ -24,10 +24,6 @@ const PatientForm = () => {
       address: "",
       medical_history: "",
       sex: "",
-      consultation_reason: "",
-      blood_pressure: "",
-      heart_rate: undefined,
-      stomatological_exam: {},
     },
   });
 
@@ -43,10 +39,6 @@ const PatientForm = () => {
         address: data.address || null,
         medical_history: data.medical_history || null,
         sex: data.sex || null,
-        consultation_reason: data.consultation_reason || null,
-        blood_pressure: data.blood_pressure || null,
-        heart_rate: data.heart_rate || null,
-        stomatological_exam: data.stomatological_exam || null,
       });
       
       if (error) throw error;
