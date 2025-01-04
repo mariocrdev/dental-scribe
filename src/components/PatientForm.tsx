@@ -1,162 +1,105 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { DialogHeader, DialogTitle } from "./ui/dialog";
-import { ScrollArea } from "./ui/scroll-area";
-import { formSchema, FormValues } from "./patient-form/schema";
-import { PersonalInfo } from "./patient-form/PersonalInfo";
-import { MedicalInfo } from "./patient-form/MedicalInfo";
-import { StomatologicalExam } from "./patient-form/StomatologicalExam";
+import { Loader2 } from "lucide-react";
 
-export default function PatientForm() {
+const PatientForm = () => {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone: "",
-      birth_date: "",
-      address: "",
-      medical_history: "",
-      sex: "",
-      age: undefined,
-      medical_record_number: "",
-      age_group: "",
-      consultation_reason: "",
-      current_illness: "",
-      personal_family_history: "",
-      blood_pressure: "",
-      heart_rate: undefined,
-      temperature: undefined,
-      respiratory_rate: undefined,
-      stomatological_exam: {
-        lips: "",
-        cheeks: "",
-        upper_maxilla: "",
-        lower_maxilla: "",
-        tongue: "",
-        palate: "",
-        floor: "",
-        lateral_cheeks: "",
-        salivary_glands: "",
-        oropharynx: "",
-        atm: "",
-        lymph_nodes: ""
-      },
-      oral_health_indicators: {
-        dental_pieces: {
-          "16_17_55": {
-            plaque: "",
-            calculus: "",
-            gingivitis: "",
-          },
-          "11_21_51": {
-            plaque: "",
-            calculus: "",
-            gingivitis: "",
-          },
-          "26_27_65": {
-            plaque: "",
-            calculus: "",
-            gingivitis: "",
-          },
-          "36_37_75": {
-            plaque: "",
-            calculus: "",
-            gingivitis: "",
-          },
-          "31_41_71": {
-            plaque: "",
-            calculus: "",
-            gingivitis: "",
-          },
-          "46_47_85": {
-            plaque: "",
-            calculus: "",
-            gingivitis: "",
-          },
-        },
-        periodontal_disease: {
-          level: undefined,
-        },
-        malocclusion: {
-          angle_classification: undefined,
-        },
-        fluorosis: {
-          level: undefined,
-        },
-      },
-      cpo_ceo_indices: {
-        permanent_teeth: {
-          C: null,
-          P: null,
-          O: null,
-          total: 0,
-        },
-        primary_teeth: {
-          c: null,
-          e: null,
-          o: null,
-          total: 0,
-        },
-      }
-    },
-  });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
 
-  async function onSubmit(values: FormValues) {
+    const formData = new FormData(e.currentTarget);
+    const patient = {
+      first_name: String(formData.get("first_name")),
+      last_name: String(formData.get("last_name")),
+      birth_date: formData.get("birth_date") ? String(formData.get("birth_date")) : null,
+      phone: formData.get("phone") ? String(formData.get("phone")) : null,
+      email: formData.get("email") ? String(formData.get("email")) : null,
+      address: formData.get("address") ? String(formData.get("address")) : null,
+      medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : null,
+    };
+
     try {
-      const { error } = await supabase.from("patients").insert({
-        ...values,
-        first_name: values.first_name,
-        last_name: values.last_name,
-      });
-      
+      const { error } = await supabase.from("patients").insert([patient]);
       if (error) throw error;
 
       toast({
-        title: "Paciente agregado",
-        description: "El paciente ha sido agregado exitosamente.",
+        title: "Paciente registrado",
+        description: "El paciente ha sido registrado exitosamente.",
       });
-
-      queryClient.invalidateQueries({ queryKey: ["patients"] });
-      form.reset();
+      
+      // Reset form
+      e.currentTarget.reset();
     } catch (error) {
       console.error("Error:", error);
       toast({
-        variant: "destructive",
         title: "Error",
-        description: "Hubo un error al agregar el paciente.",
+        description: "Hubo un error al registrar el paciente.",
+        variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="p-4">
-      <DialogHeader>
-        <DialogTitle>Agregar Nuevo Paciente</DialogTitle>
-      </DialogHeader>
-      
-      <ScrollArea className="h-[60vh] mt-4 pr-4">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <PersonalInfo form={form} />
-            <MedicalInfo form={form} />
-            <StomatologicalExam form={form} />
-            
-            <div className="pt-4 space-x-2 flex justify-end">
-              <Button type="submit">Guardar Paciente</Button>
-            </div>
-          </form>
-        </Form>
-      </ScrollArea>
-    </div>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="first_name">Nombre</Label>
+          <Input id="first_name" name="first_name" required />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="last_name">Apellido</Label>
+          <Input id="last_name" name="last_name" required />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="birth_date">Fecha de Nacimiento</Label>
+          <Input id="birth_date" name="birth_date" type="date" />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="phone">Teléfono</Label>
+          <Input id="phone" name="phone" type="tel" />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" name="email" type="email" />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="address">Dirección</Label>
+        <Input id="address" name="address" />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="medical_history">Historia Médica</Label>
+        <Textarea id="medical_history" name="medical_history" />
+      </div>
+
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Guardando...
+          </>
+        ) : (
+          "Guardar Paciente"
+        )}
+      </Button>
+    </form>
   );
-}
+};
+
+export default PatientForm;
