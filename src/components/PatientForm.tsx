@@ -28,13 +28,12 @@ const PatientForm = () => {
         };
 
         try {
-            const { error } = await supabase.from("patients").insert([patient]);
-            if (error) throw error;
-
-            toast({
-                title: "Paciente registrado",
-                description: "El paciente ha sido registrado exitosamente.",
-            });
+            const { data, error } = await supabase.from("patients").insert([patient]);
+            if (error) {
+                console.error("Error de inserción:", error);
+                throw error;
+            }
+            console.log("Datos insertados:", data); // Verifica los datos retornados
 
             // Reset form
             e.currentTarget.reset();
