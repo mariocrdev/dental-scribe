@@ -4,21 +4,33 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, LogOut, Plus, Stethoscope } from "lucide-react";
+import { Loader2, LogOut, Plus, Stethoscope, Trash2 } from "lucide-react";
 import PatientForm from "@/components/PatientForm";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
 import { OdontogramDialog } from "@/components/OdontogramDialog";
 import { PatientDetailsDialog } from "@/components/PatientDetailsDialog";
 import { Tables } from "@/integrations/supabase/types";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 const Index = () => {
   const [search, setSearch] = useState("");
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [selectedPatient, setSelectedPatient] = useState<Tables<"patients"> | null>(null);
+  const [patientToDelete, setPatientToDelete] = useState<Tables<"patients"> | null>(null);
   const navigate = useNavigate();
 
-  const { data: patients, isLoading } = useQuery({
+  const { data: patients, isLoading, refetch } = useQuery({
     queryKey: ["patients", search],
     queryFn: async () => {
       let query = supabase
@@ -28,7 +40,7 @@ const Index = () => {
 
       if (search) {
         query = query.or(
-          `first_name.ilike.%${search}%,last_name.ilike.%${search}%,medical_record_number.ilike.%${search}%`
+          `first_name.ilike.%${search}%,last_name.ilike.%${search}%`
         );
       }
 
@@ -44,6 +56,36 @@ const Index = () => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/login");
+  };
+
+  const handleDeletePatient = async () => {
+    if (!patientToDelete) return;
+
+    try {
+      // First delete all dental records for this patient
+      const { error: dentalRecordsError } = await supabase
+        .from("dental_records")
+        .delete()
+        .eq("patient_id", patientToDelete.id);
+
+      if (dentalRecordsError) throw dentalRecordsError;
+
+      // Then delete the patient
+      const { error: patientError } = await supabase
+        .from("patients")
+        .delete()
+        .eq("id", patientToDelete.id);
+
+      if (patientError) throw patientError;
+
+      toast.success("Paciente eliminado correctamente");
+      refetch(); // Refresh the patients list
+    } catch (error) {
+      console.error("Error deleting patient:", error);
+      toast.error("Error al eliminar el paciente");
+    } finally {
+      setPatientToDelete(null);
+    }
   };
 
   return (
@@ -109,6 +151,13 @@ const Index = () => {
                         >
                           Ver Detalles
                         </Button>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => setPatientToDelete(patient)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -130,6 +179,23 @@ const Index = () => {
         open={!!selectedPatient}
         onOpenChange={(open) => !open && setSelectedPatient(null)}
       />
+
+      <AlertDialog open={!!patientToDelete} onOpenChange={() => setPatientToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción eliminará permanentemente al paciente {patientToDelete?.first_name} {patientToDelete?.last_name} y todos sus registros dentales asociados.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeletePatient} className="bg-destructive text-destructive-foreground">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
