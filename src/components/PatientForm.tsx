@@ -71,36 +71,38 @@ const PatientForm = () => {
                 <div className="space-y-2">
                     <Label htmlFor="sex">Sexo</Label>
                     <div className="flex gap-4">
-                        <div>
+                        <div className="flex items-center gap-2">
                             <input
                                 type="radio"
                                 id="male"
                                 name="sex"
-                                value="male"
+                                value="M"
+                                className="h-4 w-4"
                             />
                             <Label htmlFor="male">Masculino</Label>
                         </div>
-                        <div>
+                        <div className="flex items-center gap-2">
                             <input
                                 type="radio"
                                 id="female"
                                 name="sex"
-                                value="female"
+                                value="F"
+                                className="h-4 w-4"
                             />
                             <Label htmlFor="female">Femenino</Label>
                         </div>
-                        <div>
+                        <div className="flex items-center gap-2">
                             <input
                                 type="radio"
                                 id="other"
                                 name="sex"
-                                value="other"
+                                value="O"
+                                className="h-4 w-4"
                             />
                             <Label htmlFor="other">Otro</Label>
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div className="space-y-2">
