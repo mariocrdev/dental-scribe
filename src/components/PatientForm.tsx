@@ -24,13 +24,30 @@ const PatientForm = () => {
       address: "",
       medical_history: "",
       sex: "",
+      consultation_reason: "",
+      blood_pressure: "",
+      heart_rate: undefined,
+      stomatological_exam: {},
     },
   });
 
   const onSubmit = async (data: FormValues) => {
     try {
       setLoading(true);
-      const { error } = await supabase.from("patients").insert(data);
+      const { error } = await supabase.from("patients").insert({
+        first_name: data.first_name,
+        last_name: data.last_name,
+        birth_date: data.birth_date || null,
+        phone: data.phone || null,
+        email: data.email || null,
+        address: data.address || null,
+        medical_history: data.medical_history || null,
+        sex: data.sex || null,
+        consultation_reason: data.consultation_reason || null,
+        blood_pressure: data.blood_pressure || null,
+        heart_rate: data.heart_rate || null,
+        stomatological_exam: data.stomatological_exam || null,
+      });
       
       if (error) throw error;
 
