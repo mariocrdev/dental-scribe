@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from "lucide-react";
 
 const PatientForm = () => {
     const { toast } = useToast();
@@ -28,34 +28,21 @@ const PatientForm = () => {
         };
 
         try {
-            const { data, error } = await supabase
-                .from("patients")
-                .insert([patient])
-                .select();
+            const { error } = await supabase.from("patients").insert([patient]);
+            if (error) throw error;
 
-            if (error) {
-                console.error("Supabase error:", error);
-                throw error;
-            }
+            toast({
+                title: "Paciente registrado",
+                description: "El paciente ha sido registrado exitosamente.",
+            });
 
-            if (data && data.length > 0) {
-                console.log("Patient data saved successfully:", data[0]);
-                toast({
-                    title: "Paciente registrado",
-                    description: "El paciente ha sido registrado exitosamente.",
-                });
-
-                // Reset form
-                e.currentTarget.reset();
-            } else {
-                console.error("No data returned from Supabase");
-                throw new Error("No se recibió confirmación de la inserción");
-            }
+            // Reset form
+            e.currentTarget.reset();
         } catch (error) {
-            console.error("Error al guardar el paciente:", error);
+            console.error("Error:", error);
             toast({
                 title: "Error",
-                description: "Hubo un error al registrar el paciente. Por favor, intente nuevamente.",
+                description: "Hubo un error al registrar el paciente.",
                 variant: "destructive",
             });
         } finally {
