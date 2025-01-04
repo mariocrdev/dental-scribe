@@ -1,33 +1,37 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
+import { formSchema, type FormValues } from "./patient-form/schema";
+import { PersonalInfo } from "./patient-form/PersonalInfo";
 
 const PatientForm = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      birth_date: "",
+      phone: "",
+      email: "",
+      address: "",
+      medical_history: "",
+      sex: "",
+    },
+  });
 
-    const formData = new FormData(e.currentTarget);
-    const patient = {
-      first_name: String(formData.get("first_name")),
-      last_name: String(formData.get("last_name")),
-      birth_date: formData.get("birth_date") ? String(formData.get("birth_date")) : null,
-      phone: formData.get("phone") ? String(formData.get("phone")) : null,
-      email: formData.get("email") ? String(formData.get("email")) : null,
-      address: formData.get("address") ? String(formData.get("address")) : null,
-      medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : null,
-    };
-
+  const onSubmit = async (data: FormValues) => {
     try {
-      const { error } = await supabase.from("patients").insert([patient]);
+      setLoading(true);
+      const { error } = await supabase.from("patients").insert(data);
+      
       if (error) throw error;
 
       toast({
@@ -35,8 +39,7 @@ const PatientForm = () => {
         description: "El paciente ha sido registrado exitosamente.",
       });
       
-      // Reset form
-      e.currentTarget.reset();
+      form.reset();
     } catch (error) {
       console.error("Error:", error);
       toast({
@@ -50,55 +53,22 @@ const PatientForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="first_name">Nombre</Label>
-          <Input id="first_name" name="first_name" required />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="last_name">Apellido</Label>
-          <Input id="last_name" name="last_name" required />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="birth_date">Fecha de Nacimiento</Label>
-          <Input id="birth_date" name="birth_date" type="date" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="phone">Teléfono</Label>
-          <Input id="phone" name="phone" type="tel" />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="address">Dirección</Label>
-        <Input id="address" name="address" />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="medical_history">Historia Médica</Label>
-        <Textarea id="medical_history" name="medical_history" />
-      </div>
-
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Guardando...
-          </>
-        ) : (
-          "Guardar Paciente"
-        )}
-      </Button>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <PersonalInfo form={form} />
+        
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Guardando...
+            </>
+          ) : (
+            "Guardar Paciente"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 };
 

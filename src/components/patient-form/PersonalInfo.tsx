@@ -1,5 +1,6 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { UseFormReturn } from "react-hook-form";
 import { FormValues } from "./schema";
 
@@ -43,36 +44,6 @@ export function PersonalInfo({ form }: PersonalInfoProps) {
       <div className="grid grid-cols-2 gap-4">
         <FormField
           control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Correo Electrónico</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="correo@ejemplo.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Teléfono</FormLabel>
-              <FormControl>
-                <Input placeholder="Teléfono" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
           name="birth_date"
           render={({ field }) => (
             <FormItem>
@@ -99,6 +70,62 @@ export function PersonalInfo({ form }: PersonalInfoProps) {
           )}
         />
       </div>
+
+      <FormField
+        control={form.control}
+        name="phone"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Teléfono</FormLabel>
+            <FormControl>
+              <Input placeholder="Teléfono" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="email"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Correo Electrónico</FormLabel>
+            <FormControl>
+              <Input type="email" placeholder="correo@ejemplo.com" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="address"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Dirección</FormLabel>
+            <FormControl>
+              <Input placeholder="Dirección" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="medical_history"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Historia Médica</FormLabel>
+            <FormControl>
+              <Textarea placeholder="Historia Médica" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </div>
   );
 }
