@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState } from "react"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react';
 
 const PatientForm = () => {
     const { toast } = useToast();
@@ -15,8 +15,9 @@ const PatientForm = () => {
         e.preventDefault();
         setLoading(true);
 
+        // Capturar los datos del formulario inmediatamente
         const formData = new FormData(e.currentTarget);
-        const patient = {
+        const patientData = {
             first_name: String(formData.get("first_name")),
             last_name: String(formData.get("last_name")),
             birth_date: formData.get("birth_date") ? String(formData.get("birth_date")) : null,
@@ -28,29 +29,34 @@ const PatientForm = () => {
         };
 
         try {
-            const { error } = await supabase.from("patients").insert([patient]);
-            
+            const { data, error } = await supabase
+                .from("patients")
+                .insert([patientData])
+                .select();
+
             if (error) {
-                console.error("Error de inserción:", error);
+                console.error("Supabase error:", error);
+                throw error;
+            }
+
+            if (data && data.length > 0) {
+                console.log("Patient data saved successfully:", data[0]);
                 toast({
-                    title: "Error",
-                    description: "Hubo un error al registrar el paciente.",
-                    variant: "destructive",
+                    title: "Paciente registrado",
+                    description: "El paciente ha sido registrado exitosamente.",
                 });
-            } else {
-                // Mostrar mensaje de éxito
-                toast({
-                    title: "¡Éxito!",
-                    description: "Paciente registrado correctamente.",
-                });
+
                 // Reset form
                 e.currentTarget.reset();
+            } else {
+                console.error("No data returned from Supabase");
+                throw new Error("No se recibió confirmación de la inserción");
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error al guardar el paciente:", error);
             toast({
                 title: "Error",
-                description: "Hubo un error al registrar el paciente.",
+                description: "Hubo un error al registrar el paciente. Por favor, intente nuevamente.",
                 variant: "destructive",
             });
         } finally {
@@ -148,3 +154,4 @@ const PatientForm = () => {
 };
 
 export default PatientForm;
+
