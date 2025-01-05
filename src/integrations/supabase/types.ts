@@ -62,6 +62,7 @@ export type Database = {
           medical_history: string | null
           phone: string | null
           sex: string | null
+          user_id: string
         }
         Insert: {
           address?: string | null
@@ -74,6 +75,7 @@ export type Database = {
           medical_history?: string | null
           phone?: string | null
           sex?: string | null
+          user_id?: string
         }
         Update: {
           address?: string | null
@@ -86,6 +88,7 @@ export type Database = {
           medical_history?: string | null
           phone?: string | null
           sex?: string | null
+          user_id?: string
         }
         Relationships: []
       }
