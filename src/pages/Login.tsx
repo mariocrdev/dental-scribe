@@ -42,7 +42,7 @@ const Login = () => {
                 button: {
                   background: '#2563eb',
                   color: 'white',
-                  '&:hover': {
+                  ':hover': {
                     backgroundColor: '#1d4ed8'
                   }
                 }

@@ -6,8 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from 'lucide-react';
+import { PatientFormProps } from "@/types/patient";
 
-const PatientForm = () => {
+const PatientForm = ({ onSuccess }: PatientFormProps) => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
@@ -54,6 +55,9 @@ const PatientForm = () => {
 
                 // Reset form
                 formRef.current.reset();
+                
+                // Call onSuccess callback if provided
+                onSuccess?.();
             } else {
                 console.error("No data returned from Supabase");
                 throw new Error("No se recibió confirmación de la inserción");
@@ -160,4 +164,3 @@ const PatientForm = () => {
 };
 
 export default PatientForm;
-
