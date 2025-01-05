@@ -10,11 +10,21 @@ const Login = () => {
 
   useEffect(() => {
     // Check if user is already logged in
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         navigate("/");
       }
     });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        navigate("/");
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [navigate]);
 
   return (
@@ -28,14 +38,15 @@ const Login = () => {
             supabaseClient={supabase}
             appearance={{
               theme: ThemeSupa,
-              variables: {
-                default: {
-                  colors: {
-                    brand: '#2563eb',
-                    brandAccent: '#1d4ed8',
-                  },
-                },
-              },
+              style: {
+                button: {
+                  background: '#2563eb',
+                  color: 'white',
+                  "&:hover": {
+                    background: '#1d4ed8'
+                  }
+                }
+              }
             }}
             providers={[]}
           />
