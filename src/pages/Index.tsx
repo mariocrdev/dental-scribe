@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, LogOut, Plus, Stethoscope, Trash2 } from "lucide-react";
 import PatientForm from "@/components/PatientForm";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
 import { OdontogramDialog } from "@/components/OdontogramDialog";
 import { PatientDetailsDialog } from "@/components/PatientDetailsDialog";
@@ -102,6 +102,8 @@ const Index = () => {
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[600px]">
+                <DialogTitle>Registrar Paciente</DialogTitle>
+                <DialogDescription>Completa el formulario para registrar un paciente.</DialogDescription>
                 <PatientForm />
               </DialogContent>
             </Dialog>
