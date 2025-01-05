@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,14 +10,20 @@ import { Loader2 } from 'lucide-react';
 const PatientForm = () => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
-        // Capturar los datos del formulario inmediatamente
-        const formData = new FormData(e.currentTarget);
-        const patientData = {
+        if (!formRef.current) {
+            console.error("Form reference is not available");
+            setLoading(false);
+            return;
+        }
+
+        const formData = new FormData(formRef.current);
+        const patient = {
             first_name: String(formData.get("first_name")),
             last_name: String(formData.get("last_name")),
             birth_date: formData.get("birth_date") ? String(formData.get("birth_date")) : null,
@@ -31,7 +37,7 @@ const PatientForm = () => {
         try {
             const { data, error } = await supabase
                 .from("patients")
-                .insert([patientData])
+                .insert([patient])
                 .select();
 
             if (error) {
@@ -47,7 +53,7 @@ const PatientForm = () => {
                 });
 
                 // Reset form
-                e.currentTarget.reset();
+                formRef.current.reset();
             } else {
                 console.error("No data returned from Supabase");
                 throw new Error("No se recibió confirmación de la inserción");
@@ -65,7 +71,7 @@ const PatientForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="first_name">Nombre</Label>
