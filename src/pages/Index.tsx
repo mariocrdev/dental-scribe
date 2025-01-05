@@ -23,6 +23,82 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
+// Separar la lógica de búsqueda en un componente
+const SearchInput = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
+  <div className="flex items-center space-x-2 mb-4">
+    <Input
+      placeholder="Buscar pacientes..."
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="max-w-sm"
+    />
+  </div>
+);
+
+// Separar el componente de la lista de pacientes
+const PatientList = ({ 
+  patients, 
+  isLoading, 
+  onSelectOdontogram, 
+  onSelectDetails,
+  onDeletePatient 
+}: { 
+  patients: Tables<"patients">[] | null;
+  isLoading: boolean;
+  onSelectOdontogram: (id: string) => void;
+  onSelectDetails: (patient: Tables<"patients">) => void;
+  onDeletePatient: (patient: Tables<"patients">) => void;
+}) => {
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-4">
+      {patients?.map((patient) => (
+        <Card key={patient.id}>
+          <CardContent className="p-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="font-semibold">
+                  {patient.first_name} {patient.last_name}
+                </h3>
+                <p className="text-sm text-gray-500">{patient.email}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline"
+                  onClick={() => onSelectOdontogram(patient.id)}
+                >
+                  <Stethoscope className="mr-2 h-4 w-4" />
+                  Odontograma
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => onSelectDetails(patient)}
+                >
+                  Ver Detalles
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={() => onDeletePatient(patient)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+};
+
 const Index = () => {
   const [search, setSearch] = useState("");
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
@@ -33,9 +109,13 @@ const Index = () => {
   const { data: patients, isLoading, refetch } = useQuery({
     queryKey: ["patients", search],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user logged in");
+
       let query = supabase
         .from("patients")
         .select("*")
+        .eq('user_id', user.id)
         .order("created_at", { ascending: false });
 
       if (search) {
@@ -66,7 +146,6 @@ const Index = () => {
     if (!patientToDelete) return;
 
     try {
-      // First delete all dental records for this patient
       const { error: dentalRecordsError } = await supabase
         .from("dental_records")
         .delete()
@@ -74,7 +153,6 @@ const Index = () => {
 
       if (dentalRecordsError) throw dentalRecordsError;
 
-      // Then delete the patient
       const { error: patientError } = await supabase
         .from("patients")
         .delete()
@@ -83,7 +161,7 @@ const Index = () => {
       if (patientError) throw patientError;
 
       toast.success("Paciente eliminado correctamente");
-      refetch(); // Refresh the patients list
+      refetch();
     } catch (error) {
       console.error("Error deleting patient:", error);
       toast.error("Error al eliminar el paciente");
@@ -106,7 +184,7 @@ const Index = () => {
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[600px]">
-                <PatientForm />
+                <PatientForm onSuccess={refetch} />
               </DialogContent>
             </Dialog>
             <Button variant="outline" onClick={handleLogout}>
@@ -116,59 +194,14 @@ const Index = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center space-x-2 mb-4">
-            <Input
-              placeholder="Buscar pacientes..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="max-w-sm"
-            />
-          </div>
-          
-          {isLoading ? (
-            <div className="flex justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-            </div>
-          ) : (
-            <div className="grid gap-4">
-              {patients?.map((patient) => (
-                <Card key={patient.id}>
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h3 className="font-semibold">
-                          {patient.first_name} {patient.last_name}
-                        </h3>
-                        <p className="text-sm text-gray-500">{patient.email}</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button 
-                          variant="outline"
-                          onClick={() => setSelectedPatientId(patient.id)}
-                        >
-                          <Stethoscope className="mr-2 h-4 w-4" />
-                          Odontograma
-                        </Button>
-                        <Button 
-                          variant="outline"
-                          onClick={() => setSelectedPatient(patient)}
-                        >
-                          Ver Detalles
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => setPatientToDelete(patient)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+          <SearchInput value={search} onChange={setSearch} />
+          <PatientList 
+            patients={patients}
+            isLoading={isLoading}
+            onSelectOdontogram={setSelectedPatientId}
+            onSelectDetails={setSelectedPatient}
+            onDeletePatient={setPatientToDelete}
+          />
         </CardContent>
       </Card>
 
