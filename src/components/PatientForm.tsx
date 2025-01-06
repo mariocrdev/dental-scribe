@@ -7,6 +7,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from 'lucide-react';
 import { PatientFormProps } from "@/types/patient";
+import { ScrollArea } from "./ui/scroll-area";
+import { DialogHeader, DialogTitle } from "./ui/dialog";
 
 const PatientForm = ({ onSuccess }: PatientFormProps) => {
     const { toast } = useToast();
@@ -55,7 +57,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
 
                 // Reset form
                 formRef.current.reset();
-                
+
                 // Call onSuccess callback if provided
                 onSuccess?.();
             } else {
@@ -75,91 +77,99 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
     };
 
     return (
-        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="first_name">Nombre</Label>
-                    <Input id="first_name" name="first_name" required />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="last_name">Apellido</Label>
-                    <Input id="last_name" name="last_name" required />
-                </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="birth_date">Fecha de Nacimiento</Label>
-                    <Input id="birth_date" name="birth_date" type="date" />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="sex">Sexo</Label>
-                    <div className="flex gap-4">
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="male"
-                                name="sex"
-                                value="M"
-                                className="h-4 w-4"
-                            />
-                            <Label htmlFor="male">Masculino</Label>
+        <div className="p-4">
+            <DialogHeader>
+                <DialogTitle>Agregar Nuevo Paciente</DialogTitle>
+            </DialogHeader>
+            <ScrollArea className="h-[60vh] mt-4 pr-4">
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="first_name">Nombre</Label>
+                            <Input id="first_name" name="first_name" required />
                         </div>
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="female"
-                                name="sex"
-                                value="F"
-                                className="h-4 w-4"
-                            />
-                            <Label htmlFor="female">Femenino</Label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                id="other"
-                                name="sex"
-                                value="O"
-                                className="h-4 w-4"
-                            />
-                            <Label htmlFor="other">Otro</Label>
+                        <div className="space-y-2">
+                            <Label htmlFor="last_name">Apellido</Label>
+                            <Input id="last_name" name="last_name" required />
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="phone">Teléfono</Label>
-                <Input id="phone" name="phone" type="tel" />
-            </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="birth_date">Fecha de Nacimiento</Label>
+                            <Input id="birth_date" name="birth_date" type="date" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="sex">Sexo</Label>
+                            <div className="flex gap-4">
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="radio"
+                                        id="male"
+                                        name="sex"
+                                        value="M"
+                                        className="h-4 w-4"
+                                    />
+                                    <Label htmlFor="male">Masculino</Label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="radio"
+                                        id="female"
+                                        name="sex"
+                                        value="F"
+                                        className="h-4 w-4"
+                                    />
+                                    <Label htmlFor="female">Femenino</Label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="radio"
+                                        id="other"
+                                        name="sex"
+                                        value="O"
+                                        className="h-4 w-4"
+                                    />
+                                    <Label htmlFor="other">Otro</Label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" />
-            </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="phone">Teléfono</Label>
+                        <Input id="phone" name="phone" type="tel" />
+                    </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="address">Dirección</Label>
-                <Input id="address" name="address" />
-            </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" name="email" type="email" />
+                    </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="medical_history">Historia Médica</Label>
-                <Textarea id="medical_history" name="medical_history" />
-            </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="address">Dirección</Label>
+                        <Input id="address" name="address" />
+                    </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? (
-                    <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Guardando...
-                    </>
-                ) : (
-                    "Guardar Paciente"
-                )}
-            </Button>
-        </form>
+                    <div className="space-y-2">
+                        <Label htmlFor="medical_history">Historia Médica</Label>
+                        <Textarea id="medical_history" name="medical_history" />
+                    </div>
+
+                    <Button type="submit" className="w-full" disabled={loading}>
+                        {loading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Guardando...
+                            </>
+                        ) : (
+                            "Guardar Paciente"
+                        )}
+                    </Button>
+                </form>
+            </ScrollArea>
+        </div>
     );
 };
 
