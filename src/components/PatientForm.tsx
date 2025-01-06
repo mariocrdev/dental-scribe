@@ -102,7 +102,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="sex">Sexo</Label>
-                            <div className="grid gap-4">
+                            <div className="grid grid-cols-1 gap-4">
                                 <div className="flex items-center gap-2">
                                     <input
                                         type="radio"
