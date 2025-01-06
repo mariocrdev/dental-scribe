@@ -78,7 +78,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
 
     return (
 
-        <div className="p-2">
+        <div className="p-4">
             <DialogHeader>
                 <DialogTitle>Agregar Nuevo Paciente</DialogTitle>
             </DialogHeader>
