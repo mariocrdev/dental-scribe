@@ -9,6 +9,7 @@ import { Loader2 } from 'lucide-react';
 import { PatientFormProps } from "@/types/patient";
 import { ScrollArea } from "./ui/scroll-area";
 import { DialogHeader, DialogTitle } from "./ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import * as z from "zod";
 
 // Definir esquema de validación con Zod
