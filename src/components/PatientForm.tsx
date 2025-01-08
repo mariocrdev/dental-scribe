@@ -227,6 +227,27 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                             <Label htmlFor="medical_history">Historia Médica</Label>
                             <Textarea id="medical_history" name="medical_history" />
                         </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="age_group">Grupo de Edad</Label>
+                            <Select name="age_group" required>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Seleccionar" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="menor1">Menor de 1 año</SelectItem>
+                                    <SelectItem value="1-4">1 - 4 años</SelectItem>
+                                    <SelectItem value="5-9">5 - 9 años</SelectItem>
+                                    <SelectItem value="10-14">10 - 14 años</SelectItem>
+                                    <SelectItem value="15-19">15 - 19 años</SelectItem>
+                                    <SelectItem value="mayor20">Mayor de 20 años</SelectItem>
+                                    <SelectItem value="embarazada">Embarazada</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 border rounded-lg p-4">
+
                     </div>
 
                     <Button type="submit" className="w-full" disabled={loading}>
