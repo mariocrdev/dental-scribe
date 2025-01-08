@@ -229,7 +229,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="age_group">Grupo de Edad</Label>
-                            <Select name="age_group" required>
+                            <Select id="age_group" name="age_group" required>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar" />
                                 </SelectTrigger>
