@@ -169,7 +169,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                 <Label htmlFor="last_name">Apellido</Label>
                                 <Input id="last_name" name="last_name" required />
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-2 border rounded-lg p-4">
                                 <Label htmlFor="sex">Sexo</Label>
                                 <div className="flex gap-4">
                                     <div className="flex items-center gap-2">
