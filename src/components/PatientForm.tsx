@@ -9,6 +9,19 @@ import { Loader2 } from 'lucide-react';
 import { PatientFormProps } from "@/types/patient";
 import { ScrollArea } from "./ui/scroll-area";
 import { DialogHeader, DialogTitle } from "./ui/dialog";
+import * as z from "zod";
+
+// Definir esquema de validación con Zod
+const patientSchema = z.object({
+    first_name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres." }),
+    last_name: z.string().min(2, { message: "El apellido debe tener al menos 2 caracteres." }),
+    birth_date: z.string().optional(),
+    phone: z.string().optional(),
+    email: z.string().email({ message: "Correo electrónico inválido" }).optional(),
+    address: z.string().optional(),
+    medical_history: z.string().optional(),
+    sex: z.enum(["M", "F", "O"]).optional(), // Sexo debe ser M, F u O
+});
 
 const PatientForm = ({ onSuccess }: PatientFormProps) => {
     const { toast } = useToast();
@@ -34,10 +47,14 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
             email: formData.get("email") ? String(formData.get("email")) : null,
             address: formData.get("address") ? String(formData.get("address")) : null,
             medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : null,
-            sex: formData.get("sex") ? String(formData.get("sex")) : null
+            sex: formData.get("sex") ? String(formData.get("sex")) : null,
         };
 
         try {
+            // Validar datos con Zod
+            patientSchema.parse(patient);
+
+            // Enviar datos a Supabase
             const { data, error } = await supabase
                 .from("patients")
                 .insert([patient])
@@ -55,29 +72,39 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                     description: "El paciente ha sido registrado exitosamente.",
                 });
 
-                // Reset form
+                // Resetear formulario
                 formRef.current.reset();
 
-                // Call onSuccess callback if provided
+                // Llamar a la función de éxito si se proporciona
                 onSuccess?.();
             } else {
                 console.error("No data returned from Supabase");
                 throw new Error("No se recibió confirmación de la inserción");
             }
         } catch (error) {
-            console.error("Error al guardar el paciente:", error);
-            toast({
-                title: "Error",
-                description: "Hubo un error al registrar el paciente. Por favor, intente nuevamente.",
-                variant: "destructive",
-            });
+            if (error instanceof z.ZodError) {
+                // Mostrar errores de validación
+                error.errors.forEach((err) => {
+                    toast({
+                        title: "Error de validación",
+                        description: err.message,
+                        variant: "destructive",
+                    });
+                });
+            } else {
+                console.error("Error al guardar el paciente:", error);
+                toast({
+                    title: "Error",
+                    description: "Hubo un error al registrar el paciente. Por favor, intente nuevamente.",
+                    variant: "destructive",
+                });
+            }
         } finally {
             setLoading(false);
         }
     };
 
     return (
-
         <div className="p-4">
             <DialogHeader>
                 <DialogTitle>Agregar Nuevo Paciente</DialogTitle>
