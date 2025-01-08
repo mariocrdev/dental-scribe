@@ -210,7 +210,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                 <Input id="age" name="age"/>
                             </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-4 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="phone">Teléfono</Label>
                                 <Input id="phone" name="phone" type="tel" />
@@ -223,28 +223,29 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                 <Label htmlFor="email">Email</Label>
                                 <Input id="email" name="email" type="email" />
                             </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="age_group">Grupo de Edad</Label>
+                                <Select id="age_group" name="age_group" required>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccionar" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="menor1">Menor de 1 año</SelectItem>
+                                        <SelectItem value="1-4">1 - 4 años</SelectItem>
+                                        <SelectItem value="5-9">5 - 9 años</SelectItem>
+                                        <SelectItem value="10-14">10 - 14 años</SelectItem>
+                                        <SelectItem value="15-19">15 - 19 años</SelectItem>
+                                        <SelectItem value="mayor20">Mayor de 20 años</SelectItem>
+                                        <SelectItem value="embarazada">Embarazada</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="medical_history">Historia Médica</Label>
                             <Textarea id="medical_history" name="medical_history" />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="age_group">Grupo de Edad</Label>
-                            <Select id="age_group" name="age_group" required>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Seleccionar" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="menor1">Menor de 1 año</SelectItem>
-                                    <SelectItem value="1-4">1 - 4 años</SelectItem>
-                                    <SelectItem value="5-9">5 - 9 años</SelectItem>
-                                    <SelectItem value="10-14">10 - 14 años</SelectItem>
-                                    <SelectItem value="15-19">15 - 19 años</SelectItem>
-                                    <SelectItem value="mayor20">Mayor de 20 años</SelectItem>
-                                    <SelectItem value="embarazada">Embarazada</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                        
                     </div>
 
                     <Button type="submit" className="w-full" disabled={loading}>
