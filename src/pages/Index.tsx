@@ -183,7 +183,7 @@ const Index = () => {
                   Nuevo Paciente
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px]">
+              <DialogContent className="sm:max-w-[800px]">
                 <PatientForm onSuccess={refetch} />
               </DialogContent>
             </Dialog>
