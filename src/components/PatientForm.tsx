@@ -15,12 +15,36 @@ import * as z from "zod";
 const patientSchema = z.object({
     first_name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres." }),
     last_name: z.string().min(2, { message: "El apellido debe tener al menos 2 caracteres." }),
-    birth_date: z.string().optional(),
+    sex: z.enum(["M", "F", "O"]).optional(), // Sexo debe ser M, F u O
+    age: z.number().int().positive().optional(),
+    age_group: z.string().optional(),
     phone: z.number({ message: "Numero inválido" }).positive().optional(),
     email: z.string().email({ message: "Correo electrónico inválido" }).optional(),
     address: z.string().optional(),
     medical_history: z.string().optional(),
-    sex: z.enum(["M", "F", "O"]).optional(), // Sexo debe ser M, F u O
+    current_illness: z.string().optional(),
+    personal_family_history: z.string().optional(),
+    vital_signs: z.object({
+        blood_pressure: z.string().optional(),
+        heart_rate: z.number().int().positive().optional(),
+        temperature: z.number().positive().optional(),
+        respiratory_rate: z.number().int().positive().optional()
+    }).optional(),
+    stomatological_exam: z.object({
+        lips: z.string().optional(),
+        cheeks: z.string().optional(),
+        upper_maxilla: z.string().optional(),
+        lower_maxilla: z.string().optional(),
+        tongue: z.string().optional(),
+        palate: z.string().optional(),
+        floor: z.string().optional(),
+        lateral_cheeks: z.string().optional(),
+        salivary_glands: z.string().optional(),
+        oropharynx: z.string().optional(),
+        atm: z.string().optional(),
+        lymph_nodes: z.string().optional()
+    }).optional(),
+
 });
 
 const PatientForm = ({ onSuccess }: PatientFormProps) => {
@@ -42,12 +66,35 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
         const patient = {
             first_name: String(formData.get("first_name")),
             last_name: String(formData.get("last_name")),
-            birth_date: formData.get("birth_date") ? String(formData.get("birth_date")) : null,
-            phone: formData.get("phone") ? String(formData.get("phone")) : null,
-            email: formData.get("email") ? String(formData.get("email")) : null,
-            address: formData.get("address") ? String(formData.get("address")) : null,
-            medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : null,
-            sex: formData.get("sex") ? String(formData.get("sex")) : null,
+            sex: formData.get("sex") ? String(formData.get("sex")) : undefined,
+            age: formData.get("age") ? Number(formData.get("age")) : undefined,
+            age_group: formData.get("age_group") ? String(formData.get("age_group")) : undefined,
+            phone: formData.get("phone") ? Number(formData.get("phone")) : undefined,
+            email: formData.get("email") ? String(formData.get("email")) : undefined,
+            address: formData.get("address") ? String(formData.get("address")) : undefined,
+            medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : undefined,
+            current_illness: formData.get("current_illness") ? String(formData.get("current_illness")) : undefined,
+            personal_family_history: formData.get("personal_family_history") ? String(formData.get("personal_family_history")) : undefined,
+            vital_signs: {
+                blood_pressure: formData.get("blood_pressure") ? String(formData.get("blood_pressure")) : undefined,
+                heart_rate: formData.get("heart_rate") ? Number(formData.get("heart_rate")) : undefined,
+                temperature: formData.get("temperature") ? Number(formData.get("temperature")) : undefined,
+                respiratory_rate: formData.get("respiratory_rate") ? Number(formData.get("respiratory_rate")) : undefined,
+            },
+            stomatological_exam: {
+                lips: formData.get("lips") ? String(formData.get("lips")) : undefined,
+                cheeks: formData.get("cheeks") ? String(formData.get("cheeks")) : undefined,
+                upper_maxilla: formData.get("upper_maxilla") ? String(formData.get("upper_maxilla")) : undefined,
+                lower_maxilla: formData.get("lower_maxilla") ? String(formData.get("lower_maxilla")) : undefined,
+                tongue: formData.get("tongue") ? String(formData.get("tongue")) : undefined,
+                palate: formData.get("palate") ? String(formData.get("palate")) : undefined,
+                floor: formData.get("floor") ? String(formData.get("floor")) : undefined,
+                lateral_cheeks: formData.get("lateral_cheeks") ? String(formData.get("lateral_cheeks")) : undefined,
+                salivary_glands: formData.get("salivary_glands") ? String(formData.get("salivary_glands")) : undefined,
+                oropharynx: formData.get("oropharynx") ? String(formData.get("oropharynx")) : undefined,
+                atm: formData.get("atm") ? String(formData.get("atm")) : undefined,
+                lymph_nodes: formData.get("lymph_nodes") ? String(formData.get("lymph_nodes")) : undefined,
+            },
         };
 
         try {
@@ -117,7 +164,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                 <Label htmlFor="first_name">Nombre</Label>
                                 <Input id="first_name" name="first_name" required />
                             </div>
-                            
+
                             <div className="space-y-2">
                                 <Label htmlFor="last_name">Apellido</Label>
                                 <Input id="last_name" name="last_name" required />
@@ -157,15 +204,11 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                     </div>
                                 </div>
                             </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="last_name">Edad</Label>
+                                <Input id="age" name="age"/>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="birth_date">Fecha de Nacimiento</Label>
-                            <Input id="birth_date" name="birth_date" type="date" />
-                        </div>
-                        
                     </div>
 
                     <div className="space-y-2">
