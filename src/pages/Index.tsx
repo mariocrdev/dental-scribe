@@ -183,7 +183,7 @@ const Index = () => {
                   Nuevo Paciente
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[80%]">
+              <DialogContent className="sm:max-w-[90%]">
                 <PatientForm onSuccess={refetch} />
               </DialogContent>
             </Dialog>
