@@ -246,10 +246,6 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                         </div>
                     </div>
 
-                    <div className="space-y-4 border rounded-lg p-4">
-
-                    </div>
-
                     <Button type="submit" className="w-full" disabled={loading}>
                         {loading ? (
                             <>
