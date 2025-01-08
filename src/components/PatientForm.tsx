@@ -158,7 +158,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
             </DialogHeader>
             <ScrollArea className="h-[60vh] mt-4 pr-4">
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 m-2">
-                    <div className="border rounded-lg p-4">
+                    <div className="flex border rounded-lg p-4">
                         <div className="grid grid-cols-4 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="first_name">Nombre</Label>
@@ -209,26 +209,24 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                 <Input id="age" name="age"/>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="phone">Teléfono</Label>
-                        <Input id="phone" name="phone" type="tel" />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" name="email" type="email" />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="address">Dirección</Label>
-                        <Input id="address" name="address" />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="medical_history">Historia Médica</Label>
-                        <Textarea id="medical_history" name="medical_history" />
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="phone">Teléfono</Label>
+                                <Input id="phone" name="phone" type="tel" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="address">Dirección</Label>
+                                <Input id="address" name="address" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input id="email" name="email" type="email" />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="medical_history">Historia Médica</Label>
+                            <Textarea id="medical_history" name="medical_history" />
+                        </div>
                     </div>
 
                     <Button type="submit" className="w-full" disabled={loading}>
