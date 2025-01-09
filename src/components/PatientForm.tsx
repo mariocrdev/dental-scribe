@@ -207,7 +207,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="last_name">Edad</Label>
-                                <Input id="age" name="age"/>
+                                <Input id="age" name="age" />
                             </div>
                         </div>
                         <div className="grid grid-cols-4 gap-4">
@@ -245,7 +245,14 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                             <Label htmlFor="medical_history">Historia Médica</Label>
                             <Textarea id="medical_history" name="medical_history" />
                         </div>
-                        
+
+                    </div>
+
+                    <div className="space-y-4 border rounded-lg p-4">
+                        <DialogHeader>
+                            <DialogTitle>Sintomatologia</DialogTitle>
+                        </DialogHeader>
+
                     </div>
 
                     <Button type="submit" className="w-full" disabled={loading}>
