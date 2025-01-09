@@ -276,9 +276,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                     </div>
 
                     <div className="space-y-4 border rounded-lg p-4">
-                        <DialogHeader>
-                            <DialogTitle>Sintomatologia</DialogTitle>
-                        </DialogHeader>
+                        
                         <div className="grid grid-cols-3 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="consultation_reason">Motivo de Consulta</Label>
