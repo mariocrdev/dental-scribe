@@ -11,6 +11,14 @@ import { ScrollArea } from "./ui/scroll-area";
 import { DialogHeader, DialogTitle } from "./ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import * as z from "zod";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 
 // Definir esquema de validación con Zod
 const patientSchema = z.object({
@@ -52,6 +60,31 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
+
+    const [selectedField, setSelectedField] = useState(""); // Campo actualmente seleccionado
+    const [fieldValues, setFieldValues] = useState({
+        lips: "",
+        cheeks: "",
+        upper_maxilla: "",
+        lower_maxilla: "",
+        tongue: "",
+        palate: "",
+        floor: "",
+        lateral_cheeks: "",
+        salivary_glands: "",
+        oropharynx: "",
+        atm: "",
+        lymph_nodes: "",
+    });
+
+    const handleSelectChange = (event) => {
+        setSelectedField(event.target.value);
+    };
+
+    const handleTextareaChange = (event) => {
+        const { name, value } = event.target;
+        setFieldValues((prev) => ({ ...prev, [name]: value }));
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -276,6 +309,61 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                             <div className="space-y-2">
                                 <Label htmlFor="personal_family_history">Antecedentes Personales y Familiares</Label>
                                 <Textarea id="personal_family_history" name="personal_family_history" required />
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="stomatological_exam_field">Seleccione un campo</Label>
+                                <select
+                                    id="stomatological_exam_field"
+                                    onChange={handleSelectChange}
+                                    value={selectedField}
+                                    className="border p-2 rounded w-full"
+                                >
+                                    <option value="">Seleccionar...</option>
+                                    <option value="lips">1. Labios</option>
+                                    <option value="cheeks">2. Mejillas</option>
+                                    <option value="upper_maxilla">3. Maxilar Superior</option>
+                                    <option value="lower_maxilla">4. Maxilar Inferior</option>
+                                    <option value="tongue">5. Lengua</option>
+                                    <option value="palate">6. Paladar</option>
+                                    <option value="floor">7. Piso</option>
+                                    <option value="lateral_cheeks">8. Carrillos</option>
+                                    <option value="salivary_glands">9. Glándulas Salivales</option>
+                                    <option value="oropharynx">10. Oro Faringe</option>
+                                    <option value="atm">11. A.T.M.</option>
+                                    <option value="lymph_nodes">12. Ganglios</option>
+                                </select>
+                            </div>
+
+                            {/* Textarea dinámico */}
+                            {selectedField && (
+                                <div className="space-y-2">
+                                    <Label htmlFor={selectedField}>
+                                        {`Descripción de ${selectedField.replace("_", " ")}`}
+                                    </Label>
+                                    <Textarea
+                                        id={selectedField}
+                                        name={selectedField}
+                                        placeholder={`Ingrese la descripción de ${selectedField.replace("_", " ")}`}
+                                        value={fieldValues[selectedField]}
+                                        onChange={handleTextareaChange}
+                                        className="border p-2 rounded w-full"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Vista previa de todos los campos llenados */}
+                            <div className="mt-8 space-y-2">
+                                <h3 className="text-lg font-semibold">Resumen</h3>
+                                <ul className="space-y-1">
+                                    {Object.entries(fieldValues).map(([key, value]) => (
+                                        <li key={key}>
+                                            <strong>{key.replace("_", " ")}:</strong> {value || "Sin descripción"}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
 
