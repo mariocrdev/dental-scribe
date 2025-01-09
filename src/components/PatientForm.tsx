@@ -187,6 +187,9 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
             <ScrollArea className="h-[60vh] mt-4 pr-4">
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 m-2">
                     <div className="space-y-4 border rounded-lg p-4">
+                        <DialogHeader>
+                            <DialogTitle>Datos del paciente</DialogTitle>
+                        </DialogHeader>
                         <div className="grid grid-cols-4 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="first_name">Nombre</Label>
