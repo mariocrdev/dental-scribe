@@ -11,6 +11,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { DialogHeader, DialogTitle } from "./ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import * as z from "zod";
+import { stomatologicalExamTranslations } from "@/utils/translations";
 
 // Definir esquema de validación con Zod
 const patientSchema = z.object({
@@ -45,7 +46,6 @@ const patientSchema = z.object({
         atm: z.string().optional(),
         lymph_nodes: z.string().optional()
     }).optional(),
-
 });
 
 const PatientForm = ({ onSuccess }: PatientFormProps) => {
@@ -316,31 +316,23 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                     className="border p-2 rounded w-full"
                                 >
                                     <option value="">Seleccionar...</option>
-                                    <option value="lips">1. Labios</option>
-                                    <option value="cheeks">2. Mejillas</option>
-                                    <option value="upper_maxilla">3. Maxilar Superior</option>
-                                    <option value="lower_maxilla">4. Maxilar Inferior</option>
-                                    <option value="tongue">5. Lengua</option>
-                                    <option value="palate">6. Paladar</option>
-                                    <option value="floor">7. Piso</option>
-                                    <option value="lateral_cheeks">8. Carrillos</option>
-                                    <option value="salivary_glands">9. Glándulas Salivales</option>
-                                    <option value="oropharynx">10. Oro Faringe</option>
-                                    <option value="atm">11. A.T.M.</option>
-                                    <option value="lymph_nodes">12. Ganglios</option>
+                                    {Object.entries(stomatologicalExamTranslations).map(([key, label], index) => (
+                                        <option key={key} value={key}>
+                                            {`${index + 1}. ${label}`}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
-                            {/* Textarea dinámico */}
                             {selectedField && (
                                 <div className="space-y-2">
                                     <Label htmlFor={selectedField}>
-                                        {`Descripción de ${selectedField.replace("_", " ")}`}
+                                        {`Descripción de ${stomatologicalExamTranslations[selectedField]}`}
                                     </Label>
                                     <Textarea
                                         id={selectedField}
                                         name={selectedField}
-                                        placeholder={`Ingrese la descripción de ${selectedField.replace("_", " ")}`}
+                                        placeholder={`Ingrese la descripción de ${stomatologicalExamTranslations[selectedField]}`}
                                         value={fieldValues[selectedField]}
                                         onChange={handleTextareaChange}
                                         className="border p-2 rounded w-full"
@@ -353,9 +345,11 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                 <h3 className="text-lg font-semibold">Resumen</h3>
                                 <ul className="space-y-1">
                                     {Object.entries(fieldValues).map(([key, value]) => (
-                                        <li key={key}>
-                                            <strong>{key.replace("_", " ")}:</strong> {value || "Sin descripción"}
-                                        </li>
+                                        value && (
+                                            <li key={key}>
+                                                <strong>{stomatologicalExamTranslations[key]}:</strong> {value}
+                                            </li>
+                                        )
                                     ))}
                                 </ul>
                             </div>
