@@ -53,42 +53,57 @@ export type Database = {
       patients: {
         Row: {
           address: string | null
-          birth_date: string | null
+          age: number | null
+          age_group: string | null
           created_at: string
+          current_illness: string | null
           email: string | null
           first_name: string
           id: string
           last_name: string
           medical_history: string | null
+          personal_family_history: string | null
           phone: string | null
           sex: string | null
+          stomatological_exam: Json | null
           user_id: string
+          vital_signs: Json | null
         }
         Insert: {
           address?: string | null
-          birth_date?: string | null
+          age?: number | null
+          age_group?: string | null
           created_at?: string
+          current_illness?: string | null
           email?: string | null
           first_name: string
           id?: string
           last_name: string
           medical_history?: string | null
+          personal_family_history?: string | null
           phone?: string | null
           sex?: string | null
+          stomatological_exam?: Json | null
           user_id?: string
+          vital_signs?: Json | null
         }
         Update: {
           address?: string | null
-          birth_date?: string | null
+          age?: number | null
+          age_group?: string | null
           created_at?: string
+          current_illness?: string | null
           email?: string | null
           first_name?: string
           id?: string
           last_name?: string
           medical_history?: string | null
+          personal_family_history?: string | null
           phone?: string | null
           sex?: string | null
+          stomatological_exam?: Json | null
           user_id?: string
+          vital_signs?: Json | null
         }
         Relationships: []
       }

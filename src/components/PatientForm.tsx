@@ -11,14 +11,6 @@ import { ScrollArea } from "./ui/scroll-area";
 import { DialogHeader, DialogTitle } from "./ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import * as z from "zod";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
 
 // Definir esquema de validación con Zod
 const patientSchema = z.object({
@@ -115,20 +107,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                 temperature: formData.get("temperature") ? Number(formData.get("temperature")) : undefined,
                 respiratory_rate: formData.get("respiratory_rate") ? Number(formData.get("respiratory_rate")) : undefined,
             },
-            stomatological_exam: {
-                lips: formData.get("lips") ? String(formData.get("lips")) : undefined,
-                cheeks: formData.get("cheeks") ? String(formData.get("cheeks")) : undefined,
-                upper_maxilla: formData.get("upper_maxilla") ? String(formData.get("upper_maxilla")) : undefined,
-                lower_maxilla: formData.get("lower_maxilla") ? String(formData.get("lower_maxilla")) : undefined,
-                tongue: formData.get("tongue") ? String(formData.get("tongue")) : undefined,
-                palate: formData.get("palate") ? String(formData.get("palate")) : undefined,
-                floor: formData.get("floor") ? String(formData.get("floor")) : undefined,
-                lateral_cheeks: formData.get("lateral_cheeks") ? String(formData.get("lateral_cheeks")) : undefined,
-                salivary_glands: formData.get("salivary_glands") ? String(formData.get("salivary_glands")) : undefined,
-                oropharynx: formData.get("oropharynx") ? String(formData.get("oropharynx")) : undefined,
-                atm: formData.get("atm") ? String(formData.get("atm")) : undefined,
-                lymph_nodes: formData.get("lymph_nodes") ? String(formData.get("lymph_nodes")) : undefined,
-            },
+            stomatological_exam: fieldValues, // Aquí usamos todos los valores guardados en el estado
         };
 
         try {
@@ -155,6 +134,21 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
 
                 // Resetear formulario
                 formRef.current.reset();
+                // Resetear los valores del examen estomatológico
+                setFieldValues({
+                    lips: "",
+                    cheeks: "",
+                    upper_maxilla: "",
+                    lower_maxilla: "",
+                    tongue: "",
+                    palate: "",
+                    floor: "",
+                    lateral_cheeks: "",
+                    salivary_glands: "",
+                    oropharynx: "",
+                    atm: "",
+                    lymph_nodes: "",
+                });
 
                 // Llamar a la función de éxito si se proporciona
                 onSuccess?.();
