@@ -346,7 +346,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                                 <ul className="space-y-1">
                                     {Object.entries(fieldValues).map(([key, value]) => (
                                         value && (
-                                            <li key={key}>
+                                            <li key={key} className="break-words w-full">
                                                 <strong>{stomatologicalExamTranslations[key]}:</strong> {value}
                                             </li>
                                         )
