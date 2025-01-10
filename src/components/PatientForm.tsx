@@ -184,7 +184,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
             <DialogHeader>
                 <DialogTitle>Agregar Nuevo Paciente</DialogTitle>
             </DialogHeader>
-            <ScrollArea className="h-[70vh] mt-4 pr-4">
+            <ScrollArea className="h-[75vh] mt-4 pr-4">
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 m-2">
                     <div className="space-y-4 border rounded-lg p-4">
                         <DialogHeader>
