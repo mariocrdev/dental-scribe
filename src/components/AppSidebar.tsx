@@ -7,14 +7,18 @@ import {
   LogOut, 
   ChevronLeft, 
   ChevronRight,
-  Home
+  Home,
+  Moon,
+  Sun
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useTheme } from "@/components/theme-provider";
 
 export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -25,15 +29,19 @@ export function AppSidebar() {
     navigate("/login");
   };
 
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
     <div className="h-screen flex">
       <Sidebar
         collapsed={collapsed}
         backgroundColor="rgb(255 255 255)"
-        className="h-screen border-r"
+        className="h-screen border-r dark:bg-gray-900 dark:border-gray-800"
       >
         <div className="p-4 flex justify-between items-center">
-          {!collapsed && <h2 className="text-xl font-bold">DentalApp</h2>}
+          {!collapsed && <h2 className="text-xl font-bold dark:text-white">DentalApp</h2>}
           <Button
             variant="ghost"
             size="icon"
@@ -43,28 +51,37 @@ export function AppSidebar() {
             {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           </Button>
         </div>
-        <Menu>
+        <Menu className="dark:bg-gray-900 dark:text-white">
           <MenuItem
             icon={<Home size={20} />}
             onClick={() => navigate("/")}
-            className="hover:bg-gray-100"
+            className="hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             Inicio
           </MenuItem>
           <MenuItem
             icon={<Users size={20} />}
             onClick={() => navigate("/")}
-            className="hover:bg-gray-100"
+            className="hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             Pacientes
           </MenuItem>
-          <MenuItem
-            icon={<LogOut size={20} />}
-            onClick={handleLogout}
-            className="hover:bg-gray-100 mt-auto"
-          >
-            Cerrar Sesión
-          </MenuItem>
+          <div className="mt-auto">
+            <MenuItem
+              icon={theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              onClick={toggleTheme}
+              className="hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              {theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
+            </MenuItem>
+            <MenuItem
+              icon={<LogOut size={20} />}
+              onClick={handleLogout}
+              className="hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              Cerrar Sesión
+            </MenuItem>
+          </div>
         </Menu>
       </Sidebar>
     </div>
