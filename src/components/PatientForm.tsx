@@ -10,6 +10,7 @@ import * as z from "zod";
 import { PatientBasicInfo } from "@/components/patientForm/PatientBasicInfo";
 import { ClinicalHistory } from "@/components/patientForm/ClinicalHistory";
 import { StomatologicalExam } from "@/components/patientForm/StomatologicalExam";
+import { VitalSigns } from "@/components/patientForm/VitalSigns";
 
 const patientSchema = z.object({
     first_name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres." }),
@@ -50,6 +51,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
     const [loading, setLoading] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
     const [stomatologicalExamValues, setStomatologicalExamValues] = useState<Record<string, string>>({});
+    const [vitalSignsValues, setVitalSignsValues] = useState<Record<string, string>>({});
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -74,12 +76,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
             medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : undefined,
             current_illness: formData.get("current_illness") ? String(formData.get("current_illness")) : undefined,
             personal_family_history: formData.get("personal_family_history") ? String(formData.get("personal_family_history")) : undefined,
-            vital_signs: {
-                blood_pressure: formData.get("blood_pressure") ? String(formData.get("blood_pressure")) : undefined,
-                heart_rate: formData.get("heart_rate") ? Number(formData.get("heart_rate")) : undefined,
-                temperature: formData.get("temperature") ? Number(formData.get("temperature")) : undefined,
-                respiratory_rate: formData.get("respiratory_rate") ? Number(formData.get("respiratory_rate")) : undefined,
-            },
+            vital_signs: vitalSignsValues,
             stomatological_exam: stomatologicalExamValues
         };
 
@@ -105,6 +102,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
 
                 formRef.current.reset();
                 setStomatologicalExamValues({});
+                setVitalSignsValues({});
                 onSuccess?.();
             } else {
                 console.error("No data returned from Supabase");
@@ -144,6 +142,10 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                     <StomatologicalExam 
                         fieldValues={stomatologicalExamValues}
                         onFieldValuesChange={setStomatologicalExamValues}
+                    />
+                    <VitalSigns
+                        fieldValues={vitalSignsValues}
+                        onFieldValuesChange={setVitalSignsValues}
                     />
                     <Button type="submit" className="w-full" disabled={loading}>
                         {loading ? (

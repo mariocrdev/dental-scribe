@@ -12,3 +12,10 @@ export const stomatologicalExamTranslations: Record<string, string> = {
     atm: "A.T.M.",
     lymph_nodes: "Ganglios"
 };
+
+export const vitalSignsTranslations: Record<string, string> = {
+    blood_pressure: "Presion Arterial",
+    heart_rate: "Frecuencia Cardiaca",
+    temperature: "Temperatura",
+    respiratory_rate: "Frecuencia Respiratoria"
+};
