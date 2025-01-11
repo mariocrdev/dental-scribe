@@ -139,6 +139,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 m-2">
                     <PatientBasicInfo />
                     <ClinicalHistory />
+
                     <StomatologicalExam 
                         fieldValues={stomatologicalExamValues}
                         onFieldValuesChange={setStomatologicalExamValues}
