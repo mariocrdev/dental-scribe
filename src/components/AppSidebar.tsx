@@ -54,14 +54,14 @@ export function AppSidebar() {
           <MenuItem
             icon={<Home size={20} />}
             onClick={() => navigate("/")}
-            className="hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="hover:bg-gray-800 dark:hover:bg-gray-900"
           >
             Inicio
           </MenuItem>
           <MenuItem
             icon={<Users size={20} />}
             onClick={() => navigate("/")}
-            className="hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="hover:bg-gray-800 dark:hover:bg-gray-900"
           >
             Pacientes
           </MenuItem>
@@ -69,14 +69,14 @@ export function AppSidebar() {
             <MenuItem
               icon={theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
               onClick={toggleTheme}
-              className="hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="hover:bg-gray-800 dark:hover:bg-gray-900"
             >
               {theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
             </MenuItem>
             <MenuItem
               icon={<LogOut size={20} />}
               onClick={handleLogout}
-              className="hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="hover:bg-gray-800 dark:hover:bg-gray-900"
             >
               Cerrar Sesión
             </MenuItem>
