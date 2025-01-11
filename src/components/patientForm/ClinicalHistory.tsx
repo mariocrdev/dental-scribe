@@ -1,5 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { DialogHeader, DialogTitle } from "./ui/dialog"
 
 export function ClinicalHistory() {
   return (
