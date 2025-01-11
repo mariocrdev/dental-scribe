@@ -26,9 +26,9 @@ const patientSchema = z.object({
     personal_family_history: z.string().optional(),
     vital_signs: z.object({
         blood_pressure: z.string().optional(),
-        heart_rate: z.number().int().positive().optional(),
-        temperature: z.number().positive().optional(),
-        respiratory_rate: z.number().int().positive().optional()
+        heart_rate: z.string().optional(),
+        temperature: z.string().optional(),
+        respiratory_rate: z.string().optional()
     }).optional(),
     stomatological_exam: z.object({
         lips: z.string().optional(),
