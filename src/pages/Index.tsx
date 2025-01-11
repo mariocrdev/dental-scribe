@@ -4,10 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, LogOut, Plus, Stethoscope, Trash2 } from "lucide-react";
+import { Loader2, Plus, Stethoscope, Trash2 } from "lucide-react";
 import PatientForm from "@/components/PatientForm";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useNavigate } from "react-router-dom";
 import { OdontogramDialog } from "@/components/OdontogramDialog";
 import { PatientDetailsDialog } from "@/components/PatientDetailsDialog";
 import { Tables } from "@/integrations/supabase/types";
@@ -22,8 +21,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { AppSidebar } from "@/components/AppSidebar";
 
-// Separar la lógica de búsqueda en un componente
 const SearchInput = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
   <div className="flex items-center space-x-2 mb-4">
     <Input
@@ -104,7 +103,6 @@ const Index = () => {
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [selectedPatient, setSelectedPatient] = useState<Tables<"patients"> | null>(null);
   const [patientToDelete, setPatientToDelete] = useState<Tables<"patients"> | null>(null);
-  const navigate = useNavigate();
 
   const { data: patients, isLoading, refetch } = useQuery({
     queryKey: ["patients", search],
@@ -132,15 +130,6 @@ const Index = () => {
       return data;
     },
   });
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast.error("Error al cerrar sesión");
-      return;
-    }
-    navigate("/login");
-  };
 
   const handleDeletePatient = async () => {
     if (!patientToDelete) return;
@@ -171,11 +160,12 @@ const Index = () => {
   };
 
   return (
-    <div className="container mx-auto py-8">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle className="text-2xl font-bold">Pacientes</CardTitle>
-          <div className="flex gap-2">
+    <div className="flex h-screen bg-gray-50">
+      <AppSidebar />
+      <div className="flex-1 p-8 overflow-auto">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-2xl font-bold">Pacientes</CardTitle>
             <Dialog>
               <DialogTrigger asChild>
                 <Button>
@@ -187,52 +177,48 @@ const Index = () => {
                 <PatientForm onSuccess={refetch} />
               </DialogContent>
             </Dialog>
-            <Button variant="outline" onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Cerrar Sesión
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <SearchInput value={search} onChange={setSearch} />
-          <PatientList 
-            patients={patients}
-            isLoading={isLoading}
-            onSelectOdontogram={setSelectedPatientId}
-            onSelectDetails={setSelectedPatient}
-            onDeletePatient={setPatientToDelete}
-          />
-        </CardContent>
-      </Card>
+          </CardHeader>
+          <CardContent>
+            <SearchInput value={search} onChange={setSearch} />
+            <PatientList 
+              patients={patients}
+              isLoading={isLoading}
+              onSelectOdontogram={setSelectedPatientId}
+              onSelectDetails={setSelectedPatient}
+              onDeletePatient={setPatientToDelete}
+            />
+          </CardContent>
+        </Card>
 
-      <OdontogramDialog
-        patientId={selectedPatientId || ""}
-        open={!!selectedPatientId}
-        onOpenChange={(open) => !open && setSelectedPatientId(null)}
-      />
+        <OdontogramDialog
+          patientId={selectedPatientId || ""}
+          open={!!selectedPatientId}
+          onOpenChange={(open) => !open && setSelectedPatientId(null)}
+        />
 
-      <PatientDetailsDialog
-        patient={selectedPatient}
-        open={!!selectedPatient}
-        onOpenChange={(open) => !open && setSelectedPatient(null)}
-      />
+        <PatientDetailsDialog
+          patient={selectedPatient}
+          open={!!selectedPatient}
+          onOpenChange={(open) => !open && setSelectedPatient(null)}
+        />
 
-      <AlertDialog open={!!patientToDelete} onOpenChange={() => setPatientToDelete(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta acción eliminará permanentemente al paciente {patientToDelete?.first_name} {patientToDelete?.last_name} y todos sus registros dentales asociados.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeletePatient} className="bg-destructive text-destructive-foreground">
-              Eliminar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        <AlertDialog open={!!patientToDelete} onOpenChange={() => setPatientToDelete(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta acción eliminará permanentemente al paciente {patientToDelete?.first_name} {patientToDelete?.last_name} y todos sus registros dentales asociados.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDeletePatient} className="bg-destructive text-destructive-foreground">
+                Eliminar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
     </div>
   );
 };
