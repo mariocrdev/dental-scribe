@@ -8,7 +8,7 @@ interface vitalSignsProps {
   onFieldValuesChange: (values: Record<string, string>) => void;
 }
 
-export function vitalSigns({ fieldValues, onFieldValuesChange }: vitalSignsProps) {
+export function VitalSigns({ fieldValues, onFieldValuesChange }: vitalSignsProps) {
   const [selectedField, setSelectedField] = useState("");
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
