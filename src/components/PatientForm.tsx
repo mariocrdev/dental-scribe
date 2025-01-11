@@ -140,14 +140,18 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                     <PatientBasicInfo />
                     <ClinicalHistory />
 
-                    <StomatologicalExam 
-                        fieldValues={stomatologicalExamValues}
-                        onFieldValuesChange={setStomatologicalExamValues}
-                    />
-                    <VitalSigns
-                        fieldValues={vitalSignsValues}
-                        onFieldValuesChange={setVitalSignsValues}
-                    />
+                    <div className="grid grid-cols-2 space-y-4 border rounded-lg p-4">
+                        <StomatologicalExam
+                            fieldValues={stomatologicalExamValues}
+                            onFieldValuesChange={setStomatologicalExamValues}
+                        />
+                        <VitalSigns
+                            fieldValues={vitalSignsValues}
+                            onFieldValuesChange={setVitalSignsValues}
+                        />
+                    </div>
+
+
                     <Button type="submit" className="w-full" disabled={loading}>
                         {loading ? (
                             <>

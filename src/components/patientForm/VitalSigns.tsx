@@ -22,58 +22,58 @@ export function VitalSigns({ fieldValues, onFieldValuesChange }: vitalSignsProps
   };
 
   return (
+
+
     <div className="space-y-4 border rounded-lg p-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-4 border rounded-lg p-4">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="vital_signs_field">Signos Vitales</Label>
-              <select
-                id="vital_signs_field"
-                onChange={handleSelectChange}
-                value={selectedField}
-                className="border p-2 rounded w-full"
-              >
-                <option value="">Seleccionar...</option>
-                {Object.entries(vitalSignsTranslations).map(([key, label], index) => (
-                  <option key={key} value={key}>
-                    {`${index + 1}. ${label}`}
-                  </option>
-                ))}
-              </select>
-            </div>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="vital_signs_field">Signos Vitales</Label>
+          <select
+            id="vital_signs_field"
+            onChange={handleSelectChange}
+            value={selectedField}
+            className="border p-2 rounded w-full"
+          >
+            <option value="">Seleccionar...</option>
+            {Object.entries(vitalSignsTranslations).map(([key, label], index) => (
+              <option key={key} value={key}>
+                {`${index + 1}. ${label}`}
+              </option>
+            ))}
+          </select>
+        </div>
 
-            {selectedField && (
-              <div className="space-y-2">
-                <Label htmlFor={selectedField}>
-                  {`Descripción de ${vitalSignsTranslations[selectedField]}`}
-                </Label>
-                <Textarea
-                  id={selectedField}
-                  name={selectedField}
-                  placeholder={`Ingrese la descripción de ${vitalSignsTranslations[selectedField]}`}
-                  value={fieldValues[selectedField] || ""}
-                  onChange={handleTextareaChange}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-            )}
-
-            <div className="mt-8 space-y-2">
-              <h3 className="text-lg font-semibold">Resumen</h3>
-              <ul className="space-y-1">
-                {Object.entries(fieldValues).map(([key, value]) => (
-                  value && (
-                    <li key={key} className="break-words w-full">
-                      <strong>{vitalSignsTranslations[key]}:</strong> {value}
-                    </li>
-                  )
-                ))}
-              </ul>
-            </div>
+        {selectedField && (
+          <div className="space-y-2">
+            <Label htmlFor={selectedField}>
+              {`Descripción de ${vitalSignsTranslations[selectedField]}`}
+            </Label>
+            <Textarea
+              id={selectedField}
+              name={selectedField}
+              placeholder={`Ingrese la descripción de ${vitalSignsTranslations[selectedField]}`}
+              value={fieldValues[selectedField] || ""}
+              onChange={handleTextareaChange}
+              className="border p-2 rounded w-full"
+            />
           </div>
+        )}
+
+        <div className="mt-8 space-y-2">
+          <h3 className="text-lg font-semibold">Resumen</h3>
+          <ul className="space-y-1">
+            {Object.entries(fieldValues).map(([key, value]) => (
+              value && (
+                <li key={key} className="break-words w-full">
+                  <strong>{vitalSignsTranslations[key]}:</strong> {value}
+                </li>
+              )
+            ))}
+          </ul>
         </div>
       </div>
     </div>
+
+
   );
 }
