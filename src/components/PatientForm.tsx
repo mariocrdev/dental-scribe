@@ -140,15 +140,18 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                     <PatientBasicInfo />
                     <ClinicalHistory />
 
-                    <div className="grid grid-cols-2 space-y-4 border rounded-lg p-4">
-                        <StomatologicalExam
-                            fieldValues={stomatologicalExamValues}
-                            onFieldValuesChange={setStomatologicalExamValues}
-                        />
-                        <VitalSigns
-                            fieldValues={vitalSignsValues}
-                            onFieldValuesChange={setVitalSignsValues}
-                        />
+                    <div className="space-y-4 border rounded-lg p-4">
+                        <div className="grid grid-cols-2 gap-4">
+
+                            <StomatologicalExam
+                                fieldValues={stomatologicalExamValues}
+                                onFieldValuesChange={setStomatologicalExamValues}
+                            />
+                            <VitalSigns
+                                fieldValues={vitalSignsValues}
+                                onFieldValuesChange={setVitalSignsValues}
+                            />
+                        </div>
                     </div>
 
 
