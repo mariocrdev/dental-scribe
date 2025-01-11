@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { 
@@ -37,8 +37,7 @@ export function AppSidebar() {
     <div className="h-screen flex">
       <Sidebar
         collapsed={collapsed}
-        backgroundColor="rgb(255 255 255)"
-        className="h-screen border-r dark:bg-gray-900 dark:border-gray-800"
+        className="h-screen border-r bg-background dark:bg-gray-900 dark:border-gray-800"
       >
         <div className="p-4 flex justify-between items-center">
           {!collapsed && <h2 className="text-xl font-bold dark:text-white">DentalApp</h2>}

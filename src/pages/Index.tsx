@@ -160,12 +160,12 @@ const Index = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background dark:bg-gray-900">
       <AppSidebar />
       <div className="flex-1 p-8 overflow-auto">
-        <Card>
+        <Card className="dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <CardTitle className="text-2xl font-bold">Pacientes</CardTitle>
+            <CardTitle className="text-2xl font-bold dark:text-white">Pacientes</CardTitle>
             <Dialog>
               <DialogTrigger asChild>
                 <Button>
@@ -173,7 +173,7 @@ const Index = () => {
                   Nuevo Paciente
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[90%] h-[90%]">
+              <DialogContent className="sm:max-w-[90%] h-[90%] dark:bg-gray-800">
                 <PatientForm onSuccess={refetch} />
               </DialogContent>
             </Dialog>
@@ -203,7 +203,7 @@ const Index = () => {
         />
 
         <AlertDialog open={!!patientToDelete} onOpenChange={() => setPatientToDelete(null)}>
-          <AlertDialogContent>
+          <AlertDialogContent className="dark:bg-gray-800">
             <AlertDialogHeader>
               <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
               <AlertDialogDescription>
