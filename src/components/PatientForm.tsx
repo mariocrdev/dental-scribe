@@ -11,7 +11,6 @@ import { PatientBasicInfo } from "@/components/patientForm/PatientBasicInfo";
 import { ClinicalHistory } from "@/components/patientForm/ClinicalHistory";
 import { StomatologicalExam } from "@/components/patientForm/StomatologicalExam";
 
-// Definir esquema de validación con Zod
 const patientSchema = z.object({
     first_name: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres." }),
     last_name: z.string().min(2, { message: "El apellido debe tener al menos 2 caracteres." }),
@@ -50,6 +49,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
+    const [stomatologicalExamValues, setStomatologicalExamValues] = useState<Record<string, string>>({});
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -68,7 +68,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
             sex: formData.get("sex") ? String(formData.get("sex")) : undefined,
             age: formData.get("age") ? Number(formData.get("age")) : undefined,
             age_group: formData.get("age_group") ? String(formData.get("age_group")) : undefined,
-            phone: formData.get("phone") ? Number(formData.get("phone")) : undefined,
+            phone: formData.get("phone") ? String(formData.get("phone")) : undefined,
             email: formData.get("email") ? String(formData.get("email")) : undefined,
             address: formData.get("address") ? String(formData.get("address")) : undefined,
             medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : undefined,
@@ -80,17 +80,15 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                 temperature: formData.get("temperature") ? Number(formData.get("temperature")) : undefined,
                 respiratory_rate: formData.get("respiratory_rate") ? Number(formData.get("respiratory_rate")) : undefined,
             },
-            stomatological_exam: fieldValues, // Aquí usamos todos los valores guardados en el estado
+            stomatological_exam: stomatologicalExamValues
         };
 
         try {
-            // Validar datos con Zod
             patientSchema.parse(patient);
 
-            // Enviar datos a Supabase
             const { data, error } = await supabase
                 .from("patients")
-                .insert([patient])
+                .insert(patient)
                 .select();
 
             if (error) {
@@ -105,9 +103,8 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                     description: "El paciente ha sido registrado exitosamente.",
                 });
 
-                // Resetear formulario
                 formRef.current.reset();
-                // Llamar a la función de éxito si se proporciona
+                setStomatologicalExamValues({});
                 onSuccess?.();
             } else {
                 console.error("No data returned from Supabase");
@@ -115,7 +112,6 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
             }
         } catch (error) {
             if (error instanceof z.ZodError) {
-                // Mostrar errores de validación
                 error.errors.forEach((err) => {
                     toast({
                         title: "Error de validación",
@@ -145,7 +141,10 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 m-2">
                     <PatientBasicInfo />
                     <ClinicalHistory />
-                    <StomatologicalExam />
+                    <StomatologicalExam 
+                        fieldValues={stomatologicalExamValues}
+                        onFieldValuesChange={setStomatologicalExamValues}
+                    />
                     <Button type="submit" className="w-full" disabled={loading}>
                         {loading ? (
                             <>
@@ -163,4 +162,3 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
 };
 
 export default PatientForm;
-

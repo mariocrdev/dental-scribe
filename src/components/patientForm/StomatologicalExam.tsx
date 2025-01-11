@@ -3,30 +3,22 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { stomatologicalExamTranslations } from "@/utils/translations";
 
-export function StomatologicalExam() {
-  const [selectedField, setSelectedField] = useState("");
-  const [fieldValues, setFieldValues] = useState({
-    lips: "",
-    cheeks: "",
-    upper_maxilla: "",
-    lower_maxilla: "",
-    tongue: "",
-    palate: "",
-    floor: "",
-    lateral_cheeks: "",
-    salivary_glands: "",
-    oropharynx: "",
-    atm: "",
-    lymph_nodes: "",
-  });
+interface StomatologicalExamProps {
+  fieldValues: Record<string, string>;
+  onFieldValuesChange: (values: Record<string, string>) => void;
+}
 
-  const handleSelectChange = (event) => {
+export function StomatologicalExam({ fieldValues, onFieldValuesChange }: StomatologicalExamProps) {
+  const [selectedField, setSelectedField] = useState("");
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedField(event.target.value);
   };
 
-  const handleTextareaChange = (event) => {
+  const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    setFieldValues((prev) => ({ ...prev, [name]: value }));
+    const newFieldValues = { ...fieldValues, [name]: value };
+    onFieldValuesChange(newFieldValues);
   };
 
   return (
@@ -60,7 +52,7 @@ export function StomatologicalExam() {
                   id={selectedField}
                   name={selectedField}
                   placeholder={`Ingrese la descripción de ${stomatologicalExamTranslations[selectedField]}`}
-                  value={fieldValues[selectedField]}
+                  value={fieldValues[selectedField] || ""}
                   onChange={handleTextareaChange}
                   className="border p-2 rounded w-full"
                 />
@@ -85,4 +77,3 @@ export function StomatologicalExam() {
     </div>
   );
 }
-
