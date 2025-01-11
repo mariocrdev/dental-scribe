@@ -68,7 +68,7 @@ const PatientForm = ({ onSuccess }: PatientFormProps) => {
             sex: formData.get("sex") ? String(formData.get("sex")) : undefined,
             age: formData.get("age") ? Number(formData.get("age")) : undefined,
             age_group: formData.get("age_group") ? String(formData.get("age_group")) : undefined,
-            phone: formData.get("phone") ? String(formData.get("phone")) : undefined,
+            phone: formData.get("phone") ? Number(formData.get("phone")) : undefined,
             email: formData.get("email") ? String(formData.get("email")) : undefined,
             address: formData.get("address") ? String(formData.get("address")) : undefined,
             medical_history: formData.get("medical_history") ? String(formData.get("medical_history")) : undefined,
