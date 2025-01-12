@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { AppSidebar } from "@/components/AppSidebar";
+import { UserManagement } from "@/components/UserManagement";
 
 const SearchInput = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
   <div className="flex items-center space-x-2 mb-4">
@@ -34,7 +35,6 @@ const SearchInput = ({ value, onChange }: { value: string; onChange: (value: str
   </div>
 );
 
-// Separar el componente de la lista de pacientes
 const PatientList = ({ 
   patients, 
   isLoading, 
@@ -103,6 +103,24 @@ const Index = () => {
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [selectedPatient, setSelectedPatient] = useState<Tables<"patients"> | null>(null);
   const [patientToDelete, setPatientToDelete] = useState<Tables<"patients"> | null>(null);
+  const [showUserManagement, setShowUserManagement] = useState(false);
+
+  const { data: currentUserRole } = useQuery({
+    queryKey: ["current-user-role"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user logged in");
+
+      const { data: userRole, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .single();
+
+      if (error) throw error;
+      return userRole.role;
+    },
+  });
 
   const { data: patients, isLoading, refetch } = useQuery({
     queryKey: ["patients", search],
@@ -123,10 +141,7 @@ const Index = () => {
       }
 
       const { data, error } = await query;
-      if (error) {
-        console.error("Error fetching patients:", error);
-        throw error;
-      }
+      if (error) throw error;
       return data;
     },
   });
@@ -163,32 +178,38 @@ const Index = () => {
     <div className="flex h-screen bg-background dark:bg-gray-900">
       <AppSidebar />
       <div className="flex-1 p-8 overflow-auto">
-        <Card className="dark:bg-gray-800">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <CardTitle className="text-2xl font-bold dark:text-white">Pacientes</CardTitle>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Nuevo Paciente
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[90%] h-[90%] dark:bg-gray-800">
-                <PatientForm onSuccess={refetch} />
-              </DialogContent>
-            </Dialog>
-          </CardHeader>
-          <CardContent>
-            <SearchInput value={search} onChange={setSearch} />
-            <PatientList 
-              patients={patients}
-              isLoading={isLoading}
-              onSelectOdontogram={setSelectedPatientId}
-              onSelectDetails={setSelectedPatient}
-              onDeletePatient={setPatientToDelete}
-            />
-          </CardContent>
-        </Card>
+        <div className="space-y-8">
+          {currentUserRole === 'admin' && (
+            <UserManagement />
+          )}
+          
+          <Card className="dark:bg-gray-800">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+              <CardTitle className="text-2xl font-bold dark:text-white">Pacientes</CardTitle>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Nuevo Paciente
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[90%] h-[90%] dark:bg-gray-800">
+                  <PatientForm onSuccess={refetch} />
+                </DialogContent>
+              </Dialog>
+            </CardHeader>
+            <CardContent>
+              <SearchInput value={search} onChange={setSearch} />
+              <PatientList 
+                patients={patients}
+                isLoading={isLoading}
+                onSelectOdontogram={setSelectedPatientId}
+                onSelectDetails={setSelectedPatient}
+                onDeletePatient={setPatientToDelete}
+              />
+            </CardContent>
+          </Card>
+        </div>
 
         <OdontogramDialog
           patientId={selectedPatientId || ""}
