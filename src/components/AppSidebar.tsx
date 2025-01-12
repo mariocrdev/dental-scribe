@@ -37,7 +37,7 @@ export function AppSidebar() {
     <div className="h-screen flex">
       <Sidebar
         collapsed={collapsed}
-        className="h-screen border-r bg-background "
+        className="h-screen border-r bg-background dark:bg-gray-100 dark:border-gray-800"
       >
         <div className="p-4 flex justify-between items-center">
           {!collapsed && <h2 className="text-xl font-bold dark:text-white">DentalApp</h2>}
