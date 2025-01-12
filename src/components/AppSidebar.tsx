@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { 
-  Users, 
-  LogOut, 
-  ChevronLeft, 
+import {
+  Users,
+  LogOut,
+  ChevronLeft,
   ChevronRight,
   Home,
   Moon,
@@ -36,6 +36,7 @@ export function AppSidebar() {
   return (
     <div className="h-screen flex">
       <Sidebar
+        rootStyles={{ "& .ps-sidebar-container": { backgroundColor: "transparent !important" } }}
         collapsed={collapsed}
         className="h-screen border-r bg-background dark:bg-red-900 dark:border-gray-800"
       >
