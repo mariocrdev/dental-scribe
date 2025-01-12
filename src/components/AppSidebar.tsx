@@ -9,35 +9,16 @@ import {
   ChevronRight,
   Home,
   Moon,
-  Sun,
-  Shield
+  Sun
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useTheme } from "@/components/theme-provider";
-import { useQuery } from "@tanstack/react-query";
 
 export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-
-  const { data: currentUserRole } = useQuery({
-    queryKey: ["sidebar-user-role"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user logged in");
-
-      const { data: userRole, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .single();
-
-      if (error) throw error;
-      return userRole.role;
-    },
-  });
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -85,15 +66,6 @@ export function AppSidebar() {
           >
             Pacientes
           </MenuItem>
-          {currentUserRole === 'admin' && (
-            <MenuItem
-              icon={<Shield size={20} />}
-              onClick={() => navigate("/")}
-              className="hover:bg-gray-800 dark:hover:bg-gray-900"
-            >
-              Usuarios
-            </MenuItem>
-          )}
           <div className="mt-auto">
             <MenuItem
               icon={theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
