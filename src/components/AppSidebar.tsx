@@ -46,7 +46,7 @@ export function AppSidebar() {
             variant="ghost"
             size="icon"
             onClick={() => setCollapsed(!collapsed)}
-            className="ml-auto"
+            className="ml-auto hover:bg-gray-900"
           >
             {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           </Button>
