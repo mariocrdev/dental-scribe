@@ -57,7 +57,7 @@ const PatientList = ({
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 border-gray-200">
       {patients?.map((patient) => (
         <Card key={patient.id}>
           <CardContent className="p-4">
