@@ -38,7 +38,7 @@ export function AppSidebar() {
       <Sidebar
         rootStyles={{ "& .ps-sidebar-container": { backgroundColor: "transparent !important" } }}
         collapsed={collapsed}
-        className="h-screen border-r bg-background dark:bg-red-900 dark:border-gray-800"
+        className="h-screen border-r bg-background dark:bg-gray-800 dark:border-gray-800"
       >
         <div className="p-4 flex justify-between items-center">
           {!collapsed && <h2 className="text-xl font-bold dark:text-white">DentalApp</h2>}
@@ -51,7 +51,7 @@ export function AppSidebar() {
             {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           </Button>
         </div>
-        <Menu className="dark:bg-gray-900 dark:text-white">
+        <Menu className="gap-4 dark:bg-gray-900 dark:text-white">
           <MenuItem
             icon={<Home size={20} />}
             onClick={() => navigate("/")}
