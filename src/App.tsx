@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ThemeProvider } from "@/components/theme-provider";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import Appointments from "./pages/Appointments";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +51,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Index />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/appointments"
+              element={
+                <ProtectedRoute>
+                  <Appointments />
                 </ProtectedRoute>
               }
             />

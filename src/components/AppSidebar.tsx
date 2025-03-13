@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +10,8 @@ import {
   ChevronRight,
   Home,
   Moon,
-  Sun
+  Sun,
+  Calendar
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -65,6 +67,13 @@ export function AppSidebar() {
             className="hover:bg-gray-800 dark:hover:bg-gray-900"
           >
             Pacientes
+          </MenuItem>
+          <MenuItem
+            icon={<Calendar size={20} />}
+            onClick={() => navigate("/appointments")}
+            className="hover:bg-gray-800 dark:hover:bg-gray-900"
+          >
+            Citas
           </MenuItem>
           <div className="mt-auto">
             <MenuItem

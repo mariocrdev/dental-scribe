@@ -9,6 +9,50 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_time: string
+          id: string
+          patient_id: string
+          start_time: string
+          status: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_time: string
+          id?: string
+          patient_id: string
+          start_time: string
+          status?: string | null
+          title: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_time?: string
+          id?: string
+          patient_id?: string
+          start_time?: string
+          status?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dental_records: {
         Row: {
           condition: string
@@ -107,30 +151,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_roles: {
-        Row: {
-          created_at: string
-          created_by: string | null
-          id: string
-          role: Database["public"]["Enums"]["dental_role"]
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          role?: Database["public"]["Enums"]["dental_role"]
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          role?: Database["public"]["Enums"]["dental_role"]
-          user_id?: string | null
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
@@ -139,7 +159,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      dental_role: "admin" | "dentist" | "assistant"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
